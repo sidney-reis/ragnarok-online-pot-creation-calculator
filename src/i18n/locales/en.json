@@ -1,6 +1,6 @@
 {
   "app": {
-    "title": "Ragnarok Online Potion Creation Simulator",
+    "title": "Ragnarok Online Potion Creation Calculator",
     "language": "Language",
     "english": "English",
     "portuguese": "Português"
@@ -18,17 +18,18 @@
   },
   "characterStats": {
     "title": "Character Stats & Skills",
+    "attributes": "Attributes",
     "int": "INT",
     "dex": "DEX",
     "luk": "LUK",
     "jobLevel": "Job Level",
     "baseLevel": "Base Level",
     "skills": "Skills",
-    "potionResearchLevel": "Potion Research Level",
-    "fullChemicalProtectionLevel": "Full Chemical Protection Level",
-    "specialPharmacyLevel": "Special Pharmacy Level",
-    "preparePotionLevel": "Prepare Potion Level",
-    "instructionChangeLevel": "Instruction Change Level",
+    "potionResearchLevel": "Potion Research",
+    "fullChemicalProtectionLevel": "Full Chemical Protection",
+    "specialPharmacyLevel": "Special Pharmacy",
+    "preparePotionLevel": "Prepare Potion",
+    "instructionChangeLevel": "Instruction Change",
     "calculateButton": "Calculate Creation Odds"
   },
   "validation": {
@@ -43,16 +44,17 @@
     "preparePotionRequired": "Please input Prepare Potion Level!",
     "instructionChangeRequired": "Please input Instruction Change Level!"
   },
-  "simulationResults": {
-    "title": "Simulation Results",
+  "calculationResults": {
+    "title": "Calculation Results",
     "skillUsed": "Skill Used",
     "averageCreationValue": "Average Creation Value",
     "averageItemsCreated": "Average Items Created",
-    "probabilityTitle": "Potion Creation Probability",
-    "potions": "Potions",
+    "probabilityTitle": "Item Creation Probability",
+    "potions": "Items",
     "outOf": "out of",
-    "simulations": "simulations",
-    "noResults": "Fill in your character stats and click \"Calculate Potion Creation Odds\" to see the simulation results."
+    "calculations": "calculations",
+    "probabilityChance": "Exact probability based on game formulas",
+    "noResults": "Fill in your character stats to see the precise calculation results."
   },
   "formulaInfo": {
     "title": "Formula Information",

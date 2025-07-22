@@ -1,6 +1,6 @@
 {
   "app": {
-    "title": "Simulador de Criação de Poções do Ragnarok Online",
+    "title": "Calculadora de Criação de Poções do Ragnarok Online",
     "language": "Idioma",
     "english": "English",
     "portuguese": "Português"
@@ -17,18 +17,19 @@
     "rate": "Taxa"
   },
   "characterStats": {
-    "title": "Atributos e Habilidades do Personagem",
+    "title": "Atributos & Habilidades de Personagem",
+    "attributes": "Atributos",
     "int": "INT",
     "dex": "DES",
     "luk": "SOR",
     "jobLevel": "Nível de Classe",
     "baseLevel": "Nível Base",
     "skills": "Habilidades",
-    "potionResearchLevel": "Nível de Pesquisa de Poções",
-    "fullChemicalProtectionLevel": "Nível de Proteção Química Completa",
-    "specialPharmacyLevel": "Nível de Farmacologia Avançada",
-    "preparePotionLevel": "Nível de Preparar Poção",
-    "instructionChangeLevel": "Nível de Mudança de Instrução",
+    "potionResearchLevel": "Pesquisa de Poção",
+    "fullChemicalProtectionLevel": "Proteção Química Completa",
+    "specialPharmacyLevel": "Farmácia Especial",
+    "preparePotionLevel": "Preparar Poção",
+    "instructionChangeLevel": "Mudança de Instrução",
     "calculateButton": "Calcular Chances de Criação"
   },
   "validation": {
@@ -43,16 +44,17 @@
     "preparePotionRequired": "Por favor, insira o Nível de Preparar Poção!",
     "instructionChangeRequired": "Por favor, insira o Nível de Mudança de Instrução!"
   },
-  "simulationResults": {
-    "title": "Resultados da Simulação",
+  "calculationResults": {
+    "title": "Resultados dos Cálculos",
     "skillUsed": "Habilidade Usada",
     "averageCreationValue": "Valor Médio de Criação",
     "averageItemsCreated": "Média de Itens Criados",
-    "probabilityTitle": "Probabilidade de Criação de Poções",
-    "potions": "Poções",
+    "probabilityTitle": "Probabilidade de Criação de Itens",
+    "potions": "Itens",
     "outOf": "de",
-    "simulations": "simulações",
-    "noResults": "Preencha os atributos do seu personagem e clique em \"Calcular Chances de Criação\" para ver os resultados da simulação."
+    "calculations": "cálculos",
+    "probabilityChance": "Probabilidade exata baseada nas fórmulas do jogo",
+    "noResults": "Preencha os atributos do seu personagem para ver os resultados precisos dos cálculos."
   },
   "formulaInfo": {
     "title": "Informações da Fórmula",

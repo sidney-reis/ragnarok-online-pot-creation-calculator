@@ -2,14 +2,12 @@ import React, { useState, useEffect } from "react";
 import {
   Form,
   InputNumber,
-  Button,
   Card,
   Row,
   Col,
   Typography,
   Space,
   Divider,
-  Alert,
   Statistic,
   Input,
   Select,
@@ -1357,7 +1355,6 @@ function App() {
   const { t } = useTranslation();
   const [form] = Form.useForm();
   const [results, setResults] = useState<SimulationResult[]>([]);
-  const [isCalculating, setIsCalculating] = useState(false);
   const [selectedItemType, setSelectedItemType] = useState<string>(
     "enriched_white_potionz"
   );
@@ -1496,33 +1493,21 @@ function App() {
     saveData(dataToSave);
   }, [selectedItemType, isFormulaCollapsed, isInitialized]);
 
-  const getRandomInRange = (min: number, max: number): number => {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  };
-
-  const calculateCreation = (values: FormValues): number => {
-    const randomBonus = getRandomInRange(30, 150);
-    const fcp = values.fullChemicalProtectionLevel * getRandomInRange(4, 10);
-
+  const calculateBaseCreation = (values: FormValues): number => {
     return (
       values.int +
       Math.floor(values.dex / 2) +
       values.luk +
       values.jobLevel +
-      randomBonus +
       (values.baseLevel - 100) +
-      values.potionResearchLevel * 5 +
-      fcp
+      values.potionResearchLevel * 5
     );
   };
 
   const calculatePotionsCreated = (
-    creation: number,
-    difficulty: number,
+    difference: number,
     maxPotions: number
   ): number => {
-    const difference = creation - difficulty;
-
     if (difference >= 400) {
       return maxPotions;
     } else if (difference >= 300) {
@@ -1537,15 +1522,15 @@ function App() {
   };
 
   const calculateBrewingRate = (values: FormValues): number => {
-    return (
+    const rate =
       values.preparePotionLevel * 3 +
       values.potionResearchLevel +
       values.instructionChangeLevel +
       values.jobLevel * 0.2 +
       values.dex * 0.1 +
       values.luk * 0.1 +
-      values.int * 0.05
-    );
+      values.int * 0.05;
+    return Math.min(100, Math.max(0, rate)); // Cap between 0-100%
   };
 
   const calculateMixedCookingCreation = (values: FormValues): number => {
@@ -1556,14 +1541,9 @@ function App() {
     );
   };
 
-  const calculateMixedCookingDishes = (
-    creation: number,
-    difficulty: number
-  ): number => {
-    const difference = creation - difficulty;
-
+  const calculateMixedCookingDishes = (difference: number): number => {
     if (difference >= 30) {
-      return getRandomInRange(10, 12); // 10~12 dishes
+      return 11; // Average of 10-12 dishes
     } else if (difference >= 10) {
       return 10; // 10 dishes
     } else if (difference === -10) {
@@ -1577,73 +1557,113 @@ function App() {
     }
   };
 
-  const runSimulation = (
-    values: FormValues,
-    iterations: number = 1000
-  ): SimulationResult[] => {
+  const calculatePreciseResults = (values: FormValues): SimulationResult[] => {
     const itemData = itemTypes[values.itemType];
     const results: SimulationResult[] = [];
 
     if (itemData.skill === "special_pharmacy") {
-      // Special Pharmacy logic
+      // Special Pharmacy precise calculation
       const pharmacyData = specialPharmacyTable[values.specialPharmacyLevel];
       const difficulty = pharmacyData.specificValue + (itemData.itemRate || 0);
+      const baseCreation = calculateBaseCreation(values);
 
-      for (let i = 0; i < iterations; i++) {
-        const creation = calculateCreation(values);
-        const difference = creation - difficulty;
-        const potionsCreated = calculatePotionsCreated(
-          creation,
-          difficulty,
-          pharmacyData.maxPotions
-        );
+      // Calculate all possible outcomes based on random ranges
+      // Random bonus: 30-150 (121 possible values)
+      // FCP bonus: level * (4-10) (7 possible values per level)
+      const fcpLevel = values.fullChemicalProtectionLevel;
+      const outcomes: Record<number, number> = {};
 
+      for (let randomBonus = 30; randomBonus <= 150; randomBonus++) {
+        for (let fcpMultiplier = 4; fcpMultiplier <= 10; fcpMultiplier++) {
+          const fcpBonus = fcpLevel * fcpMultiplier;
+          const totalCreation = baseCreation + randomBonus + fcpBonus;
+          const difference = totalCreation - difficulty;
+          const potionsCreated = calculatePotionsCreated(
+            difference,
+            pharmacyData.maxPotions
+          );
+
+          outcomes[potionsCreated] = (outcomes[potionsCreated] || 0) + 1;
+        }
+      }
+
+      // Convert to results with precise percentages
+      const totalCombinations = 121 * 7; // 847 total combinations
+      Object.entries(outcomes).forEach(([potions, count]) => {
+        const percentage = (count / totalCombinations) * 100;
+        for (let i = 0; i < Math.round(percentage * 100); i++) {
+          results.push({
+            creation: baseCreation + 90, // Average creation value for display
+            difficulty,
+            difference: baseCreation + 90 - difficulty,
+            potionsCreated: parseInt(potions),
+            successRate: `${percentage.toFixed(2)}%`,
+            skill: itemData.skill,
+          });
+        }
+      });
+    } else if (itemData.skill === "potion_creation") {
+      // Potion Creation precise calculation
+      const brewingRate =
+        calculateBrewingRate(values) + (itemData.potionRate || 0);
+      const finalRate = Math.min(100, Math.max(0, brewingRate));
+
+      // Create results based on exact success rate
+      const successCount = Math.round(finalRate);
+      const failureCount = 100 - successCount;
+
+      for (let i = 0; i < successCount; i++) {
         results.push({
-          creation,
-          difficulty,
-          difference,
-          potionsCreated,
-          successRate: "",
+          creation: finalRate,
+          difficulty: 0,
+          difference: finalRate,
+          potionsCreated: 1,
+          successRate: `${finalRate.toFixed(1)}%`,
           skill: itemData.skill,
         });
       }
-    } else if (itemData.skill === "potion_creation") {
-      // Potion Creation logic
-      const brewingRate =
-        calculateBrewingRate(values) + (itemData.potionRate || 0);
 
-      for (let i = 0; i < iterations; i++) {
-        const success = Math.random() * 100 < brewingRate;
-
+      for (let i = 0; i < failureCount; i++) {
         results.push({
-          creation: brewingRate,
+          creation: finalRate,
           difficulty: 0,
-          difference: brewingRate,
-          potionsCreated: success ? 1 : 0,
-          successRate: `${brewingRate.toFixed(1)}%`,
+          difference: finalRate,
+          potionsCreated: 0,
+          successRate: `${finalRate.toFixed(1)}%`,
           skill: itemData.skill,
         });
       }
     } else {
-      // Mixed Cooking logic
-      for (let i = 0; i < iterations; i++) {
-        const creation = calculateMixedCookingCreation(values);
-        const randomDifficulty =
-          getRandomInRange(30, 150) + (itemData.itemRate || 0);
-        const dishesCreated = calculateMixedCookingDishes(
-          creation,
-          randomDifficulty
-        );
+      // Mixed Cooking precise calculation
+      const creation = calculateMixedCookingCreation(values);
+      const itemRate = itemData.itemRate || 0;
 
-        results.push({
-          creation,
-          difficulty: randomDifficulty,
-          difference: creation - randomDifficulty,
-          potionsCreated: dishesCreated,
-          successRate: "",
-          skill: itemData.skill,
-        });
+      // Calculate outcomes for difficulty range 30-150 + itemRate
+      const outcomes: Record<number, number> = {};
+
+      for (let baseDifficulty = 30; baseDifficulty <= 150; baseDifficulty++) {
+        const totalDifficulty = baseDifficulty + itemRate;
+        const difference = creation - totalDifficulty;
+        const dishesCreated = calculateMixedCookingDishes(difference);
+
+        outcomes[dishesCreated] = (outcomes[dishesCreated] || 0) + 1;
       }
+
+      // Convert to results with precise percentages
+      const totalCombinations = 121; // 121 possible difficulty values
+      Object.entries(outcomes).forEach(([dishes, count]) => {
+        const percentage = (count / totalCombinations) * 100;
+        for (let i = 0; i < Math.round(percentage * 100); i++) {
+          results.push({
+            creation,
+            difficulty: 90 + itemRate, // Average difficulty for display
+            difference: creation - (90 + itemRate),
+            potionsCreated: parseInt(dishes),
+            successRate: `${percentage.toFixed(2)}%`,
+            skill: itemData.skill,
+          });
+        }
+      });
     }
 
     return results;
@@ -1667,13 +1687,9 @@ function App() {
   };
 
   const onFinish = async (values: FormValues) => {
-    setIsCalculating(true);
-
-    // Run simulation
-    const simulationResults = runSimulation(values, 10000);
-    setResults(simulationResults);
-
-    setIsCalculating(false);
+    // Calculate precise results
+    const preciseResults = calculatePreciseResults(values);
+    setResults(preciseResults);
   };
 
   const statistics = results.length > 0 ? calculateStatistics(results) : [];
@@ -1723,6 +1739,9 @@ function App() {
       };
       console.log("Saving data:", dataToSave);
       saveData(dataToSave);
+
+      // Automatically submit the form when item is selected
+      form.submit();
     }
   };
 
@@ -1766,17 +1785,19 @@ function App() {
   };
 
   return (
-    <div style={{ padding: "24px", maxWidth: "1400px", margin: "0 auto" }}>
+    <div style={{ padding: 16, paddingBottom: 0 }}>
       <div
         style={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          marginBottom: "32px",
         }}
       >
         <div style={{ flex: 1 }} />
-        <Title level={1} style={{ textAlign: "center", margin: 0, flex: 1 }}>
+        <Title
+          level={3}
+          style={{ textAlign: "center", margin: 0, marginBottom: 16, flex: 1 }}
+        >
           {t("app.title")}
         </Title>
         <div style={{ flex: 1, display: "flex", justifyContent: "flex-end" }}>
@@ -1786,6 +1807,7 @@ function App() {
               value={i18n.language}
               onChange={handleLanguageChange}
               style={{ width: 120 }}
+              size="small"
               options={[
                 { value: "en", label: t("app.english") },
                 { value: "pt", label: t("app.portuguese") },
@@ -1795,368 +1817,601 @@ function App() {
         </div>
       </div>
 
-      <Row gutter={[24, 24]}>
-        <Col xs={24} lg={8}>
-          <Card title={t("itemSelection.title")} size="small">
-            <Space direction="vertical" style={{ width: "100%" }} size="small">
-              <Input
-                placeholder={t("itemSelection.searchPlaceholder")}
-                value={searchText}
-                onChange={(e) => setSearchText(e.target.value)}
-                allowClear
-              />
-              <Select
-                style={{ width: "100%" }}
-                placeholder={t("itemSelection.filterPlaceholder")}
-                value={skillFilter}
-                onChange={setSkillFilter}
-                optionRender={(option) => {
-                  if (option.value === "all") {
-                    return <span>{t("itemSelection.allSkills")}</span>;
-                  }
-                  let iconUrl = "";
-                  let skillName = "";
+      <Row gutter={[24, 24]} style={{ height: "calc(100vh - 64px)" }}>
+        <Col xs={24} lg={12} style={{ maxWidth: "600px", height: "100%" }}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "24px",
+              height: "100%",
+            }}
+          >
+            <Card title={t("characterStats.title")} size="small">
+              <Form
+                form={form}
+                layout="vertical"
+                requiredMark={false}
+                onFinish={onFinish}
+                onValuesChange={() => {
+                  // Save form data whenever any field changes and auto-calculate results
+                  if (isInitialized) {
+                    setTimeout(() => {
+                      const formValues = form.getFieldsValue();
+                      const cleanFormValues = {
+                        int: formValues.int,
+                        dex: formValues.dex,
+                        luk: formValues.luk,
+                        jobLevel: formValues.jobLevel,
+                        baseLevel: formValues.baseLevel,
+                        potionResearchLevel: formValues.potionResearchLevel,
+                        fullChemicalProtectionLevel:
+                          formValues.fullChemicalProtectionLevel,
+                        specialPharmacyLevel: formValues.specialPharmacyLevel,
+                        preparePotionLevel: formValues.preparePotionLevel,
+                        instructionChangeLevel:
+                          formValues.instructionChangeLevel,
+                        itemType: formValues.itemType,
+                      };
+                      const dataToSave = {
+                        selectedItemType,
+                        formValues: cleanFormValues,
+                        isFormulaCollapsed,
+                      };
+                      saveData(dataToSave);
 
-                  if (option.value === "special_pharmacy") {
-                    iconUrl =
-                      "https://irowiki.org/w/images/1/13/Special_Pharmacy.png";
-                    skillName = t("itemSelection.specialPharmacy");
-                  } else if (option.value === "potion_creation") {
-                    iconUrl =
-                      "https://irowiki.org/w/images/5/53/Prepare_Potion.png";
-                    skillName = t("itemSelection.potionCreation");
-                  } else if (option.value === "mixed_cooking") {
-                    iconUrl =
-                      "https://irowiki.org/w/images/3/35/Mixed_Cooking.png";
-                    skillName = t("itemSelection.mixedCooking");
+                      // Auto-calculate results when form values change
+                      const preciseResults =
+                        calculatePreciseResults(cleanFormValues);
+                      setResults(preciseResults);
+                    }, 100);
                   }
-
-                  return (
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "8px",
-                      }}
-                    >
-                      <img
-                        src={iconUrl}
-                        alt={skillName}
-                        style={{ width: "16px", height: "16px" }}
-                      />
-                      <span>{skillName}</span>
-                    </div>
-                  );
                 }}
-                options={[
-                  { value: "all", label: t("itemSelection.allSkills") },
-                  {
-                    value: "special_pharmacy",
-                    label: t("itemSelection.specialPharmacy"),
-                  },
-                  {
-                    value: "potion_creation",
-                    label: t("itemSelection.potionCreation"),
-                  },
-                  {
-                    value: "mixed_cooking",
-                    label: t("itemSelection.mixedCooking"),
-                  },
-                ]}
-              />
-            </Space>
-
-            <Divider style={{ margin: "12px 0" }} />
-
-            <div style={{ maxHeight: "500px", overflowY: "auto" }}>
-              <Space
-                direction="vertical"
-                style={{ width: "100%" }}
-                size="small"
               >
-                {filteredItems.length === 0 ? (
-                  <div
-                    style={{
-                      textAlign: "center",
-                      padding: "20px",
-                      color: "#999",
-                    }}
-                  >
-                    {t("itemSelection.noItemsFound")}
-                  </div>
-                ) : (
-                  filteredItems.map(([key, value]) => {
-                    const rate = value.itemRate || value.potionRate || 0;
-                    const skillName =
-                      value.skill === "special_pharmacy"
-                        ? t("itemSelection.specialPharmacy")
-                        : value.skill === "potion_creation"
-                        ? t("itemSelection.potionCreation")
-                        : t("itemSelection.mixedCooking");
-                    const isSelected = selectedItemType === key;
+                <Form.Item name="itemType" style={{ display: "none" }}>
+                  <input type="hidden" />
+                </Form.Item>
+
+                <Row gutter={8}>
+                  <Col span={5}>
+                    <Form.Item
+                      label={t("characterStats.int")}
+                      name="int"
+                      rules={[
+                        {
+                          required: true,
+                          message: t("validation.intRequired"),
+                        },
+                      ]}
+                    >
+                      <InputNumber
+                        min={1}
+                        max={999}
+                        style={{ width: "100%" }}
+                        size="small"
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={5}>
+                    <Form.Item
+                      label={t("characterStats.dex")}
+                      name="dex"
+                      rules={[
+                        {
+                          required: true,
+                          message: t("validation.dexRequired"),
+                        },
+                      ]}
+                    >
+                      <InputNumber
+                        min={1}
+                        max={999}
+                        style={{ width: "100%" }}
+                        size="small"
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={5}>
+                    <Form.Item
+                      label={t("characterStats.luk")}
+                      name="luk"
+                      rules={[
+                        {
+                          required: true,
+                          message: t("validation.lukRequired"),
+                        },
+                      ]}
+                    >
+                      <InputNumber
+                        min={1}
+                        max={999}
+                        style={{ width: "100%" }}
+                        size="small"
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={5}>
+                    <Form.Item
+                      label={t("characterStats.baseLevel")}
+                      name="baseLevel"
+                      rules={[
+                        {
+                          required: true,
+                          message: t("validation.baseLevelRequired"),
+                        },
+                      ]}
+                    >
+                      <InputNumber
+                        min={1}
+                        max={999}
+                        style={{ width: "100%" }}
+                        size="small"
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={4}>
+                    <Form.Item
+                      label={t("characterStats.jobLevel")}
+                      name="jobLevel"
+                      rules={[
+                        {
+                          required: true,
+                          message: t("validation.jobLevelRequired"),
+                        },
+                      ]}
+                    >
+                      <InputNumber
+                        min={1}
+                        max={70}
+                        style={{ width: "100%" }}
+                        size="small"
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+
+                <Row gutter={8} style={{ marginTop: "4px" }}>
+                  <Col span={5}>
+                    <Form.Item
+                      label={t("characterStats.potionResearchLevel")}
+                      name="potionResearchLevel"
+                      rules={[
+                        {
+                          required: true,
+                          message: t("validation.potionResearchRequired"),
+                        },
+                      ]}
+                    >
+                      <InputNumber
+                        min={0}
+                        max={10}
+                        style={{ width: "100%" }}
+                        size="small"
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={5}>
+                    <Form.Item
+                      label={t("characterStats.fullChemicalProtectionLevel")}
+                      name="fullChemicalProtectionLevel"
+                      rules={[
+                        {
+                          required: true,
+                          message: t("validation.fcpRequired"),
+                        },
+                      ]}
+                    >
+                      <InputNumber
+                        min={0}
+                        max={5}
+                        style={{ width: "100%" }}
+                        size="small"
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={5}>
+                    <Form.Item
+                      label={t("characterStats.specialPharmacyLevel")}
+                      name="specialPharmacyLevel"
+                      rules={[
+                        {
+                          required: true,
+                          message: t("validation.specialPharmacyRequired"),
+                        },
+                      ]}
+                    >
+                      <InputNumber
+                        min={1}
+                        max={10}
+                        style={{ width: "100%" }}
+                        size="small"
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={5}>
+                    <Form.Item
+                      label={t("characterStats.preparePotionLevel")}
+                      name="preparePotionLevel"
+                      rules={[
+                        {
+                          required: true,
+                          message: t("validation.preparePotionRequired"),
+                        },
+                      ]}
+                    >
+                      <InputNumber
+                        min={0}
+                        max={10}
+                        style={{ width: "100%" }}
+                        size="small"
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={4}>
+                    <Form.Item
+                      label={t("characterStats.instructionChangeLevel")}
+                      name="instructionChangeLevel"
+                      rules={[
+                        {
+                          required: true,
+                          message: t("validation.instructionChangeRequired"),
+                        },
+                      ]}
+                    >
+                      <InputNumber
+                        min={0}
+                        max={5}
+                        style={{ width: "100%" }}
+                        size="small"
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </Form>
+            </Card>
+
+            <div
+              style={{
+                flex: "1 1 0",
+                display: "flex",
+                flexDirection: "column",
+              }}
+              title={t("itemSelection.title")}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "12px",
+                  flex: "1 1 0",
+                }}
+              >
+                <Input
+                  placeholder={t("itemSelection.searchPlaceholder")}
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
+                  allowClear
+                />
+                <Select
+                  style={{ width: "100%" }}
+                  placeholder={t("itemSelection.filterPlaceholder")}
+                  value={skillFilter}
+                  onChange={setSkillFilter}
+                  optionRender={(option) => {
+                    if (option.value === "all") {
+                      return <span>{t("itemSelection.allSkills")}</span>;
+                    }
+                    let iconUrl = "";
+                    let skillName = "";
+
+                    if (option.value === "special_pharmacy") {
+                      iconUrl =
+                        "https://irowiki.org/w/images/1/13/Special_Pharmacy.png";
+                      skillName = t("itemSelection.specialPharmacy");
+                    } else if (option.value === "potion_creation") {
+                      iconUrl =
+                        "https://irowiki.org/w/images/5/53/Prepare_Potion.png";
+                      skillName = t("itemSelection.potionCreation");
+                    } else if (option.value === "mixed_cooking") {
+                      iconUrl =
+                        "https://irowiki.org/w/images/3/35/Mixed_Cooking.png";
+                      skillName = t("itemSelection.mixedCooking");
+                    }
 
                     return (
-                      <Card
-                        key={key}
-                        size="small"
-                        hoverable
-                        onClick={() => handleItemSelect(key)}
+                      <div
                         style={{
-                          cursor: "pointer",
-                          border: isSelected
-                            ? "2px solid #1890ff"
-                            : "1px solid #d9d9d9",
-                          backgroundColor: isSelected ? "#f0f8ff" : "white",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "8px",
                         }}
                       >
+                        <img
+                          src={iconUrl}
+                          alt={skillName}
+                          style={{ width: "16px", height: "16px" }}
+                        />
+                        <span>{skillName}</span>
+                      </div>
+                    );
+                  }}
+                  options={[
+                    { value: "all", label: t("itemSelection.allSkills") },
+                    {
+                      value: "special_pharmacy",
+                      label: t("itemSelection.specialPharmacy"),
+                    },
+                    {
+                      value: "potion_creation",
+                      label: t("itemSelection.potionCreation"),
+                    },
+                    {
+                      value: "mixed_cooking",
+                      label: t("itemSelection.mixedCooking"),
+                    },
+                  ]}
+                />
+
+                <Divider style={{ margin: "12px 0" }} />
+                <div style={{ flex: "1 1 0", overflow: "auto" }}>
+                  <Space
+                    direction="vertical"
+                    style={{ width: "100%" }}
+                    size="small"
+                  >
+                    {filteredItems.length === 0 ? (
+                      <div
+                        style={{
+                          textAlign: "center",
+                          padding: "20px",
+                          color: "#999",
+                        }}
+                      >
+                        {t("itemSelection.noItemsFound")}
+                      </div>
+                    ) : (
+                      filteredItems.map(([key, value]) => {
+                        const rate = value.itemRate || value.potionRate || 0;
+                        const skillName =
+                          value.skill === "special_pharmacy"
+                            ? t("itemSelection.specialPharmacy")
+                            : value.skill === "potion_creation"
+                            ? t("itemSelection.potionCreation")
+                            : t("itemSelection.mixedCooking");
+                        const isSelected = selectedItemType === key;
+
+                        return (
+                          <Card
+                            key={key}
+                            size="small"
+                            hoverable
+                            onClick={() => handleItemSelect(key)}
+                            style={{
+                              cursor: "pointer",
+                              border: isSelected
+                                ? "2px solid #1890ff"
+                                : "1px solid #d9d9d9",
+                              backgroundColor: isSelected ? "#f0f8ff" : "white",
+                            }}
+                          >
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "12px",
+                              }}
+                            >
+                              <img
+                                src={value.icon}
+                                alt={value.name}
+                                style={{ width: "32px", height: "32px" }}
+                              />
+                              <div style={{ flex: 1 }}>
+                                <div style={{ fontWeight: "bold" }}>
+                                  {translateText(value.name)}
+                                </div>
+                                <div
+                                  style={{ color: "#666", fontSize: "12px" }}
+                                >
+                                  {skillName}
+                                </div>
+                                <div
+                                  style={{
+                                    color: rate >= 0 ? "#52c41a" : "#ff4d4f",
+                                    fontSize: "12px",
+                                  }}
+                                >
+                                  Rate: {rate > 0 ? "+" : ""}
+                                  {rate}
+                                </div>
+                              </div>
+                            </div>
+                          </Card>
+                        );
+                      })
+                    )}
+                  </Space>
+                </div>
+              </div>
+            </div>
+            {/* <Card
+              title={t("itemSelection.title")}
+              size="small"
+              style={{
+                flex: 1,
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "12px",
+                  height: "100%",
+                }}
+              >
+                <div>
+                  <Input
+                    placeholder={t("itemSelection.searchPlaceholder")}
+                    value={searchText}
+                    onChange={(e) => setSearchText(e.target.value)}
+                    allowClear
+                  />
+                  <Select
+                    style={{ width: "100%" }}
+                    placeholder={t("itemSelection.filterPlaceholder")}
+                    value={skillFilter}
+                    onChange={setSkillFilter}
+                    optionRender={(option) => {
+                      if (option.value === "all") {
+                        return <span>{t("itemSelection.allSkills")}</span>;
+                      }
+                      let iconUrl = "";
+                      let skillName = "";
+
+                      if (option.value === "special_pharmacy") {
+                        iconUrl =
+                          "https://irowiki.org/w/images/1/13/Special_Pharmacy.png";
+                        skillName = t("itemSelection.specialPharmacy");
+                      } else if (option.value === "potion_creation") {
+                        iconUrl =
+                          "https://irowiki.org/w/images/5/53/Prepare_Potion.png";
+                        skillName = t("itemSelection.potionCreation");
+                      } else if (option.value === "mixed_cooking") {
+                        iconUrl =
+                          "https://irowiki.org/w/images/3/35/Mixed_Cooking.png";
+                        skillName = t("itemSelection.mixedCooking");
+                      }
+
+                      return (
                         <div
                           style={{
                             display: "flex",
                             alignItems: "center",
-                            gap: "12px",
+                            gap: "8px",
                           }}
                         >
                           <img
-                            src={value.icon}
-                            alt={value.name}
-                            style={{ width: "32px", height: "32px" }}
+                            src={iconUrl}
+                            alt={skillName}
+                            style={{ width: "16px", height: "16px" }}
                           />
-                          <div style={{ flex: 1 }}>
-                            <div style={{ fontWeight: "bold" }}>
-                              {translateText(value.name)}
-                            </div>
-                            <div style={{ color: "#666", fontSize: "12px" }}>
-                              {skillName}
-                            </div>
+                          <span>{skillName}</span>
+                        </div>
+                      );
+                    }}
+                    options={[
+                      { value: "all", label: t("itemSelection.allSkills") },
+                      {
+                        value: "special_pharmacy",
+                        label: t("itemSelection.specialPharmacy"),
+                      },
+                      {
+                        value: "potion_creation",
+                        label: t("itemSelection.potionCreation"),
+                      },
+                      {
+                        value: "mixed_cooking",
+                        label: t("itemSelection.mixedCooking"),
+                      },
+                    ]}
+                  />
+
+                  <Divider style={{ margin: "12px 0" }} />
+                </div>
+                <div style={{ height: "100%", overflow: "auto" }}>
+                  <Space
+                    direction="vertical"
+                    style={{ width: "100%", overflow: "auto" }}
+                    size="small"
+                  >
+                    {filteredItems.length === 0 ? (
+                      <div
+                        style={{
+                          textAlign: "center",
+                          padding: "20px",
+                          color: "#999",
+                        }}
+                      >
+                        {t("itemSelection.noItemsFound")}
+                      </div>
+                    ) : (
+                      filteredItems.map(([key, value]) => {
+                        const rate = value.itemRate || value.potionRate || 0;
+                        const skillName =
+                          value.skill === "special_pharmacy"
+                            ? t("itemSelection.specialPharmacy")
+                            : value.skill === "potion_creation"
+                            ? t("itemSelection.potionCreation")
+                            : t("itemSelection.mixedCooking");
+                        const isSelected = selectedItemType === key;
+
+                        return (
+                          <Card
+                            key={key}
+                            size="small"
+                            hoverable
+                            onClick={() => handleItemSelect(key)}
+                            style={{
+                              cursor: "pointer",
+                              border: isSelected
+                                ? "2px solid #1890ff"
+                                : "1px solid #d9d9d9",
+                              backgroundColor: isSelected ? "#f0f8ff" : "white",
+                            }}
+                          >
                             <div
                               style={{
-                                color: rate >= 0 ? "#52c41a" : "#ff4d4f",
-                                fontSize: "12px",
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "12px",
                               }}
                             >
-                              Rate: {rate > 0 ? "+" : ""}
-                              {rate}
+                              <img
+                                src={value.icon}
+                                alt={value.name}
+                                style={{ width: "32px", height: "32px" }}
+                              />
+                              <div style={{ flex: 1 }}>
+                                <div style={{ fontWeight: "bold" }}>
+                                  {translateText(value.name)}
+                                </div>
+                                <div
+                                  style={{ color: "#666", fontSize: "12px" }}
+                                >
+                                  {skillName}
+                                </div>
+                                <div
+                                  style={{
+                                    color: rate >= 0 ? "#52c41a" : "#ff4d4f",
+                                    fontSize: "12px",
+                                  }}
+                                >
+                                  Rate: {rate > 0 ? "+" : ""}
+                                  {rate}
+                                </div>
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                      </Card>
-                    );
-                  })
-                )}
-              </Space>
-            </div>
-          </Card>
-        </Col>
-
-        <Col xs={24} lg={8}>
-          <Card
-            title={`${t("characterStats.title")} - ${
-              selectedItemData.skill === "special_pharmacy"
-                ? t("itemSelection.specialPharmacy")
-                : selectedItemData.skill === "potion_creation"
-                ? t("itemSelection.potionCreation")
-                : t("itemSelection.mixedCooking")
-            }`}
-            size="small"
-          >
-            <Form
-              form={form}
-              layout="vertical"
-              onFinish={onFinish}
-              onValuesChange={() => {
-                // Save form data whenever any field changes
-                if (isInitialized) {
-                  setTimeout(() => {
-                    const formValues = form.getFieldsValue();
-                    const cleanFormValues = {
-                      int: formValues.int,
-                      dex: formValues.dex,
-                      luk: formValues.luk,
-                      jobLevel: formValues.jobLevel,
-                      baseLevel: formValues.baseLevel,
-                      potionResearchLevel: formValues.potionResearchLevel,
-                      fullChemicalProtectionLevel:
-                        formValues.fullChemicalProtectionLevel,
-                      specialPharmacyLevel: formValues.specialPharmacyLevel,
-                      preparePotionLevel: formValues.preparePotionLevel,
-                      instructionChangeLevel: formValues.instructionChangeLevel,
-                      itemType: formValues.itemType,
-                    };
-                    const dataToSave = {
-                      selectedItemType,
-                      formValues: cleanFormValues,
-                      isFormulaCollapsed,
-                    };
-                    saveData(dataToSave);
-                  }, 100);
-                }
-              }}
-            >
-              <Form.Item name="itemType" style={{ display: "none" }}>
-                <input type="hidden" />
-              </Form.Item>
-
-              <Row gutter={16}>
-                <Col span={12}>
-                  <Form.Item
-                    label={t("characterStats.int")}
-                    name="int"
-                    rules={[
-                      { required: true, message: t("validation.intRequired") },
-                    ]}
-                  >
-                    <InputNumber min={1} max={999} style={{ width: "100%" }} />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    label={t("characterStats.dex")}
-                    name="dex"
-                    rules={[
-                      { required: true, message: t("validation.dexRequired") },
-                    ]}
-                  >
-                    <InputNumber min={1} max={999} style={{ width: "100%" }} />
-                  </Form.Item>
-                </Col>
-              </Row>
-
-              <Row gutter={16}>
-                <Col span={12}>
-                  <Form.Item
-                    label={t("characterStats.luk")}
-                    name="luk"
-                    rules={[
-                      { required: true, message: t("validation.lukRequired") },
-                    ]}
-                  >
-                    <InputNumber min={1} max={999} style={{ width: "100%" }} />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    label={t("characterStats.jobLevel")}
-                    name="jobLevel"
-                    rules={[
-                      {
-                        required: true,
-                        message: t("validation.jobLevelRequired"),
-                      },
-                    ]}
-                  >
-                    <InputNumber min={1} max={70} style={{ width: "100%" }} />
-                  </Form.Item>
-                </Col>
-              </Row>
-
-              <Form.Item
-                label={t("characterStats.baseLevel")}
-                name="baseLevel"
-                rules={[
-                  {
-                    required: true,
-                    message: t("validation.baseLevelRequired"),
-                  },
-                ]}
-              >
-                <InputNumber min={1} max={999} style={{ width: "100%" }} />
-              </Form.Item>
-
-              <Divider>{t("characterStats.skills")}</Divider>
-
-              <Form.Item
-                label={t("characterStats.potionResearchLevel")}
-                name="potionResearchLevel"
-                rules={[
-                  {
-                    required: true,
-                    message: t("validation.potionResearchRequired"),
-                  },
-                ]}
-              >
-                <InputNumber min={0} max={10} style={{ width: "100%" }} />
-              </Form.Item>
-
-              {selectedItemData.skill === "special_pharmacy" && (
-                <>
-                  <Form.Item
-                    label={t("characterStats.fullChemicalProtectionLevel")}
-                    name="fullChemicalProtectionLevel"
-                    rules={[
-                      { required: true, message: t("validation.fcpRequired") },
-                    ]}
-                  >
-                    <InputNumber min={0} max={5} style={{ width: "100%" }} />
-                  </Form.Item>
-
-                  <Form.Item
-                    label={t("characterStats.specialPharmacyLevel")}
-                    name="specialPharmacyLevel"
-                    rules={[
-                      {
-                        required: true,
-                        message: t("validation.specialPharmacyRequired"),
-                      },
-                    ]}
-                  >
-                    <InputNumber min={1} max={10} style={{ width: "100%" }} />
-                  </Form.Item>
-                </>
-              )}
-
-              {selectedItemData.skill === "potion_creation" && (
-                <>
-                  <Form.Item
-                    label={t("characterStats.preparePotionLevel")}
-                    name="preparePotionLevel"
-                    rules={[
-                      {
-                        required: true,
-                        message: t("validation.preparePotionRequired"),
-                      },
-                    ]}
-                  >
-                    <InputNumber min={0} max={10} style={{ width: "100%" }} />
-                  </Form.Item>
-
-                  <Form.Item
-                    label={t("characterStats.instructionChangeLevel")}
-                    name="instructionChangeLevel"
-                    rules={[
-                      {
-                        required: true,
-                        message: t("validation.instructionChangeRequired"),
-                      },
-                    ]}
-                  >
-                    <InputNumber min={0} max={5} style={{ width: "100%" }} />
-                  </Form.Item>
-                </>
-              )}
-
-              <Form.Item>
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  loading={isCalculating}
-                  size="large"
-                  style={{ width: "100%" }}
-                >
-                  {t("characterStats.calculateButton")}
-                </Button>
-              </Form.Item>
-            </Form>
-          </Card>
+                          </Card>
+                        );
+                      })
+                    )}
+                  </Space>
+                </div>
+              </div>
+            </Card> */}
+          </div>
         </Col>
 
         <Col xs={24} lg={8}>
           {results.length > 0 && (
             <Space direction="vertical" style={{ width: "100%" }} size="large">
-              <Card title={t("simulationResults.title")} size="small">
+              <Card title={t("calculationResults.title")} size="small">
                 <Row gutter={16}>
                   <Col span={24}>
                     <Statistic
-                      title={t("simulationResults.skillUsed")}
+                      title={t("calculationResults.skillUsed")}
                       value={
                         skillUsed === "special_pharmacy"
                           ? t("itemSelection.specialPharmacy")
@@ -2199,14 +2454,14 @@ function App() {
                 <Row gutter={16} style={{ marginTop: "16px" }}>
                   <Col span={12}>
                     <Statistic
-                      title={t("simulationResults.averageCreationValue")}
+                      title={t("calculationResults.averageCreationValue")}
                       value={avgCreation}
                       precision={2}
                     />
                   </Col>
                   <Col span={12}>
                     <Statistic
-                      title={t("simulationResults.averageItemsCreated")}
+                      title={t("calculationResults.averageItemsCreated")}
                       value={avgPotions}
                       precision={2}
                     />
@@ -2215,31 +2470,116 @@ function App() {
               </Card>
 
               <Card
-                title={t("simulationResults.probabilityTitle")}
+                title={t("calculationResults.probabilityTitle")}
                 size="small"
               >
                 <Space direction="vertical" style={{ width: "100%" }}>
-                  {statistics.map((stat) => (
-                    <Alert
-                      key={stat.potions}
-                      message={`${stat.potions} ${t(
-                        "simulationResults.potions"
-                      )}: ${stat.percentage}%`}
-                      description={`${stat.count} ${t(
-                        "simulationResults.outOf"
-                      )} ${results.length} ${t(
-                        "simulationResults.simulations"
-                      )}`}
-                      type={
-                        stat.potions >= 8
-                          ? "success"
-                          : stat.potions >= 5
-                          ? "warning"
-                          : "error"
+                  {statistics.map((stat) => {
+                    // Determine color based on skill type and relative performance
+                    let colorType: "success" | "warning" | "error" | "neutral" =
+                      "neutral";
+
+                    if (skillUsed === "potion_creation") {
+                      // For potion creation: 1 = success (green), 0 = failure (red)
+                      colorType = stat.potions === 1 ? "success" : "error";
+                    } else if (skillUsed === "special_pharmacy") {
+                      // For special pharmacy: relative to max possible (7-12 depending on level)
+                      const maxPossible = Math.max(
+                        ...statistics.map((s) => s.potions)
+                      );
+                      const minPossible = Math.min(
+                        ...statistics.map((s) => s.potions)
+                      );
+                      const range = maxPossible - minPossible;
+
+                      if (
+                        stat.potions >=
+                        maxPossible - Math.floor(range * 0.2)
+                      ) {
+                        colorType = "success"; // Top 20% of results
+                      } else if (
+                        stat.potions >=
+                        maxPossible - Math.floor(range * 0.6)
+                      ) {
+                        colorType = "warning"; // Middle 40% of results
+                      } else {
+                        colorType = "error"; // Bottom 40% of results
                       }
-                      showIcon
-                    />
-                  ))}
+                    } else if (skillUsed === "mixed_cooking") {
+                      // For mixed cooking: relative performance, 0 = failure
+                      if (stat.potions === 0) {
+                        colorType = "error"; // Complete failure
+                      } else if (stat.potions >= 10) {
+                        colorType = "success"; // Good results
+                      } else if (stat.potions >= 8) {
+                        colorType = "warning"; // Decent results
+                      } else {
+                        colorType = "error"; // Poor results
+                      }
+                    }
+
+                    const colors = {
+                      success: {
+                        bg: "#f6ffed",
+                        border: "#b7eb8f",
+                        dot: "#52c41a",
+                      },
+                      warning: {
+                        bg: "#fffbe6",
+                        border: "#ffe58f",
+                        dot: "#faad14",
+                      },
+                      error: {
+                        bg: "#fff2f0",
+                        border: "#ffccc7",
+                        dot: "#ff4d4f",
+                      },
+                      neutral: {
+                        bg: "#fafafa",
+                        border: "#d9d9d9",
+                        dot: "#8c8c8c",
+                      },
+                    };
+
+                    return (
+                      <div
+                        key={stat.potions}
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          padding: "12px 16px",
+                          backgroundColor: colors[colorType].bg,
+                          border: `1px solid ${colors[colorType].border}`,
+                          borderRadius: "6px",
+                          marginBottom: "8px",
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "8px",
+                          }}
+                        >
+                          <div
+                            style={{
+                              width: "8px",
+                              height: "8px",
+                              borderRadius: "50%",
+                              backgroundColor: colors[colorType].dot,
+                            }}
+                          />
+                          <Text strong>
+                            {stat.potions} {t("calculationResults.potions")}
+                          </Text>
+                        </div>
+                        <Text strong style={{ fontSize: "16px" }}>
+                          {stat.percentage}%
+                        </Text>
+                      </div>
+                    );
+                  })}
                 </Space>
               </Card>
 
@@ -2371,7 +2711,9 @@ function App() {
           {results.length === 0 && (
             <Card>
               <div style={{ textAlign: "center", padding: "48px 0" }}>
-                <Text type="secondary">{t("simulationResults.noResults")}</Text>
+                <Text type="secondary">
+                  {t("calculationResults.noResults")}
+                </Text>
               </div>
             </Card>
           )}
