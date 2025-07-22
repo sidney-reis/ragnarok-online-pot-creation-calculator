@@ -12,9 +12,22 @@ const resources = {
   },
 };
 
+// Get saved language from localStorage or default to 'en'
+const getSavedLanguage = (): string => {
+  try {
+    const savedLanguage = localStorage.getItem("ragnarok-simulator-language");
+    return savedLanguage && ["en", "pt"].includes(savedLanguage)
+      ? savedLanguage
+      : "en";
+  } catch (error) {
+    console.error("Error loading saved language:", error);
+    return "en";
+  }
+};
+
 i18n.use(initReactI18next).init({
   resources,
-  lng: "en", // default language
+  lng: getSavedLanguage(), // use saved language or default
   fallbackLng: "en",
   interpolation: {
     escapeValue: false,

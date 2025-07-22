@@ -1645,6 +1645,12 @@ function App() {
 
   const handleLanguageChange = (language: string) => {
     i18n.changeLanguage(language);
+    // Save language preference to localStorage
+    try {
+      localStorage.setItem("ragnarok-simulator-language", language);
+    } catch (error) {
+      console.error("Error saving language preference:", error);
+    }
   };
 
   // Helper function to translate item names and book names
