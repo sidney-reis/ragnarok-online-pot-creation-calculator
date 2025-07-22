@@ -1,6 +1,6 @@
 {
   "app": {
-    "title": "Calculadora de Criação de Poções do Ragnarok Online",
+    "title": "Calculadora de Criação de Poções Ragnarok Online",
     "language": "Idioma",
     "english": "English",
     "portuguese": "Português"
@@ -22,14 +22,14 @@
     "int": "INT",
     "dex": "DES",
     "luk": "SOR",
-    "jobLevel": "Nível de Classe",
+    "jobLevel": "Nv. Classe",
     "baseLevel": "Nível Base",
     "skills": "Habilidades",
     "potionResearchLevel": "Pesquisa de Poção",
-    "fullChemicalProtectionLevel": "Proteção Química Completa",
+    "fullChemicalProtectionLevel": "Proteção Química Total",
     "specialPharmacyLevel": "Farmácia Especial",
     "preparePotionLevel": "Preparar Poção",
-    "instructionChangeLevel": "Mudança de Instrução",
+    "instructionChangeLevel": "Mudança de Planos",
     "calculateButton": "Calcular Chances de Criação"
   },
   "validation": {

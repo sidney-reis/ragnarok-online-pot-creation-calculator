@@ -11,7 +11,6 @@ import {
   Statistic,
   Input,
   Select,
-  Collapse,
 } from "antd";
 import { useTranslation } from "react-i18next";
 import i18n from "./i18n";
@@ -1789,18 +1788,26 @@ function App() {
       <div
         style={{
           display: "flex",
+          marginBottom: 16,
           justifyContent: "space-between",
-          alignItems: "center",
         }}
       >
-        <div style={{ flex: 1 }} />
         <Title
           level={3}
-          style={{ textAlign: "center", margin: 0, marginBottom: 16, flex: 1 }}
+          style={{
+            textAlign: "center",
+            margin: 0,
+          }}
         >
           {t("app.title")}
         </Title>
-        <div style={{ flex: 1, display: "flex", justifyContent: "flex-end" }}>
+        <div
+          style={{
+            display: "flex",
+            alignSelf: "flex-start",
+            justifyContent: "flex-end",
+          }}
+        >
           <Space>
             <Text>{t("app.language")}:</Text>
             <Select
@@ -2075,8 +2082,11 @@ function App() {
                 flex: "1 1 0",
                 display: "flex",
                 flexDirection: "column",
+                border: "1px solid #f0f0f0",
+                padding: 10,
+                borderRadius: 8,
+                marginBottom: 16,
               }}
-              title={t("itemSelection.title")}
             >
               <div
                 style={{
@@ -2153,24 +2163,26 @@ function App() {
                 />
 
                 <Divider style={{ margin: "12px 0" }} />
-                <div style={{ flex: "1 1 0", overflow: "auto" }}>
-                  <Space
-                    direction="vertical"
-                    style={{ width: "100%" }}
-                    size="small"
-                  >
-                    {filteredItems.length === 0 ? (
-                      <div
-                        style={{
-                          textAlign: "center",
-                          padding: "20px",
-                          color: "#999",
-                        }}
-                      >
-                        {t("itemSelection.noItemsFound")}
-                      </div>
-                    ) : (
-                      filteredItems.map(([key, value]) => {
+                <div
+                  style={{
+                    flex: "1 1 0",
+                    overflowY: "auto",
+                    overflowX: "hidden",
+                  }}
+                >
+                  {filteredItems.length === 0 ? (
+                    <div
+                      style={{
+                        textAlign: "center",
+                        padding: "20px",
+                        color: "#999",
+                      }}
+                    >
+                      {t("itemSelection.noItemsFound")}
+                    </div>
+                  ) : (
+                    <Row gutter={[8, 8]}>
+                      {filteredItems.map(([key, value]) => {
                         const rate = value.itemRate || value.potionRate || 0;
                         const skillName =
                           value.skill === "special_pharmacy"
@@ -2181,226 +2193,71 @@ function App() {
                         const isSelected = selectedItemType === key;
 
                         return (
-                          <Card
-                            key={key}
-                            size="small"
-                            hoverable
-                            onClick={() => handleItemSelect(key)}
-                            style={{
-                              cursor: "pointer",
-                              border: isSelected
-                                ? "2px solid #1890ff"
-                                : "1px solid #d9d9d9",
-                              backgroundColor: isSelected ? "#f0f8ff" : "white",
-                            }}
-                          >
-                            <div
+                          <Col span={12} key={key}>
+                            <Card
+                              size="small"
+                              hoverable
+                              onClick={() => handleItemSelect(key)}
                               style={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: "12px",
+                                cursor: "pointer",
+                                border: isSelected
+                                  ? "2px solid #1890ff"
+                                  : "1px solid #d9d9d9",
+                                backgroundColor: isSelected
+                                  ? "#f0f8ff"
+                                  : "white",
+                                height: "100%",
                               }}
                             >
-                              <img
-                                src={value.icon}
-                                alt={value.name}
-                                style={{ width: "32px", height: "32px" }}
-                              />
-                              <div style={{ flex: 1 }}>
-                                <div style={{ fontWeight: "bold" }}>
-                                  {translateText(value.name)}
-                                </div>
-                                <div
-                                  style={{ color: "#666", fontSize: "12px" }}
-                                >
-                                  {skillName}
-                                </div>
-                                <div
-                                  style={{
-                                    color: rate >= 0 ? "#52c41a" : "#ff4d4f",
-                                    fontSize: "12px",
-                                  }}
-                                >
-                                  Rate: {rate > 0 ? "+" : ""}
-                                  {rate}
+                              <div
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: "8px",
+                                }}
+                              >
+                                <img
+                                  src={value.icon}
+                                  alt={value.name}
+                                  style={{ width: "24px", height: "24px" }}
+                                />
+                                <div style={{ flex: 1, minWidth: 0 }}>
+                                  <div
+                                    style={{
+                                      fontWeight: "bold",
+                                      fontSize: "12px",
+                                      overflow: "hidden",
+                                      textOverflow: "ellipsis",
+                                      whiteSpace: "nowrap",
+                                    }}
+                                  >
+                                    {translateText(value.name)}
+                                  </div>
+                                  <div
+                                    style={{ color: "#666", fontSize: "10px" }}
+                                  >
+                                    {skillName}
+                                  </div>
+                                  <div
+                                    style={{
+                                      color: rate >= 0 ? "#52c41a" : "#ff4d4f",
+                                      fontSize: "10px",
+                                    }}
+                                  >
+                                    Rate: {rate > 0 ? "+" : ""}
+                                    {rate}
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          </Card>
+                            </Card>
+                          </Col>
                         );
-                      })
-                    )}
-                  </Space>
+                      })}
+                    </Row>
+                  )}
                 </div>
               </div>
             </div>
-            {/* <Card
-              title={t("itemSelection.title")}
-              size="small"
-              style={{
-                flex: 1,
-                display: "flex",
-                flexDirection: "column",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "12px",
-                  height: "100%",
-                }}
-              >
-                <div>
-                  <Input
-                    placeholder={t("itemSelection.searchPlaceholder")}
-                    value={searchText}
-                    onChange={(e) => setSearchText(e.target.value)}
-                    allowClear
-                  />
-                  <Select
-                    style={{ width: "100%" }}
-                    placeholder={t("itemSelection.filterPlaceholder")}
-                    value={skillFilter}
-                    onChange={setSkillFilter}
-                    optionRender={(option) => {
-                      if (option.value === "all") {
-                        return <span>{t("itemSelection.allSkills")}</span>;
-                      }
-                      let iconUrl = "";
-                      let skillName = "";
-
-                      if (option.value === "special_pharmacy") {
-                        iconUrl =
-                          "https://irowiki.org/w/images/1/13/Special_Pharmacy.png";
-                        skillName = t("itemSelection.specialPharmacy");
-                      } else if (option.value === "potion_creation") {
-                        iconUrl =
-                          "https://irowiki.org/w/images/5/53/Prepare_Potion.png";
-                        skillName = t("itemSelection.potionCreation");
-                      } else if (option.value === "mixed_cooking") {
-                        iconUrl =
-                          "https://irowiki.org/w/images/3/35/Mixed_Cooking.png";
-                        skillName = t("itemSelection.mixedCooking");
-                      }
-
-                      return (
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "8px",
-                          }}
-                        >
-                          <img
-                            src={iconUrl}
-                            alt={skillName}
-                            style={{ width: "16px", height: "16px" }}
-                          />
-                          <span>{skillName}</span>
-                        </div>
-                      );
-                    }}
-                    options={[
-                      { value: "all", label: t("itemSelection.allSkills") },
-                      {
-                        value: "special_pharmacy",
-                        label: t("itemSelection.specialPharmacy"),
-                      },
-                      {
-                        value: "potion_creation",
-                        label: t("itemSelection.potionCreation"),
-                      },
-                      {
-                        value: "mixed_cooking",
-                        label: t("itemSelection.mixedCooking"),
-                      },
-                    ]}
-                  />
-
-                  <Divider style={{ margin: "12px 0" }} />
-                </div>
-                <div style={{ height: "100%", overflow: "auto" }}>
-                  <Space
-                    direction="vertical"
-                    style={{ width: "100%", overflow: "auto" }}
-                    size="small"
-                  >
-                    {filteredItems.length === 0 ? (
-                      <div
-                        style={{
-                          textAlign: "center",
-                          padding: "20px",
-                          color: "#999",
-                        }}
-                      >
-                        {t("itemSelection.noItemsFound")}
-                      </div>
-                    ) : (
-                      filteredItems.map(([key, value]) => {
-                        const rate = value.itemRate || value.potionRate || 0;
-                        const skillName =
-                          value.skill === "special_pharmacy"
-                            ? t("itemSelection.specialPharmacy")
-                            : value.skill === "potion_creation"
-                            ? t("itemSelection.potionCreation")
-                            : t("itemSelection.mixedCooking");
-                        const isSelected = selectedItemType === key;
-
-                        return (
-                          <Card
-                            key={key}
-                            size="small"
-                            hoverable
-                            onClick={() => handleItemSelect(key)}
-                            style={{
-                              cursor: "pointer",
-                              border: isSelected
-                                ? "2px solid #1890ff"
-                                : "1px solid #d9d9d9",
-                              backgroundColor: isSelected ? "#f0f8ff" : "white",
-                            }}
-                          >
-                            <div
-                              style={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: "12px",
-                              }}
-                            >
-                              <img
-                                src={value.icon}
-                                alt={value.name}
-                                style={{ width: "32px", height: "32px" }}
-                              />
-                              <div style={{ flex: 1 }}>
-                                <div style={{ fontWeight: "bold" }}>
-                                  {translateText(value.name)}
-                                </div>
-                                <div
-                                  style={{ color: "#666", fontSize: "12px" }}
-                                >
-                                  {skillName}
-                                </div>
-                                <div
-                                  style={{
-                                    color: rate >= 0 ? "#52c41a" : "#ff4d4f",
-                                    fontSize: "12px",
-                                  }}
-                                >
-                                  Rate: {rate > 0 ? "+" : ""}
-                                  {rate}
-                                </div>
-                              </div>
-                            </div>
-                          </Card>
-                        );
-                      })
-                    )}
-                  </Space>
-                </div>
-              </div>
-            </Card> */}
           </div>
         </Col>
 
@@ -2583,128 +2440,166 @@ function App() {
                 </Space>
               </Card>
 
-              <Collapse
-                size="small"
-                activeKey={isFormulaCollapsed ? [] : ["formula"]}
-                onChange={(keys) => {
-                  const isOpen = keys.includes("formula");
-                  setIsFormulaCollapsed(!isOpen);
-                }}
-                items={[
-                  {
-                    key: "formula",
-                    label: t("formulaInfo.title"),
-                    children:
-                      skillUsed === "special_pharmacy" ? (
-                        <>
-                          <Text>
-                            <strong>
-                              {t("formulaInfo.specialPharmacy.creationFormula")}
-                            </strong>
-                            <br />
-                            {t(
-                              "formulaInfo.specialPharmacy.creationFormulaText"
+              <Card title={t("formulaInfo.title")} size="small">
+                {skillUsed === "special_pharmacy" ? (
+                  <>
+                    <Text>
+                      <strong>
+                        {t("formulaInfo.specialPharmacy.creationFormula")}
+                      </strong>
+                      <br />
+                      {t("formulaInfo.specialPharmacy.creationFormulaText")}
+                    </Text>
+                    <br />
+                    <br />
+                    <Text>
+                      <strong>
+                        {t("formulaInfo.specialPharmacy.difficultyFormula")}
+                      </strong>
+                      <br />
+                      {t("formulaInfo.specialPharmacy.difficultyFormulaText")}
+                    </Text>
+                    <br />
+                    <br />
+                    <Text>
+                      <strong>
+                        {t("formulaInfo.specialPharmacy.successConditions")}
+                      </strong>
+                      <br />• {t("formulaInfo.specialPharmacy.condition1")}
+                      <br />• {t("formulaInfo.specialPharmacy.condition2")}
+                      <br />• {t("formulaInfo.specialPharmacy.condition3")}
+                      <br />• {t("formulaInfo.specialPharmacy.condition4")}
+                      <br />• {t("formulaInfo.specialPharmacy.condition5")}
+                    </Text>
+                  </>
+                ) : skillUsed === "potion_creation" ? (
+                  <>
+                    <Text>
+                      <strong>
+                        {t("formulaInfo.potionCreation.brewingRateFormula")}
+                      </strong>
+                      <br />
+                      {t("formulaInfo.potionCreation.brewingRateFormulaText")}
+                    </Text>
+                    <br />
+                    <br />
+                    <Text>
+                      <strong>
+                        {t("formulaInfo.potionCreation.successCondition")}
+                      </strong>
+                      <br />
+                      {t("formulaInfo.potionCreation.successConditionText1")}
+                      <br />
+                      {t("formulaInfo.potionCreation.successConditionText2")}
+                    </Text>
+                  </>
+                ) : (
+                  <>
+                    <Text>
+                      <strong>
+                        {t("formulaInfo.mixedCooking.creationFormula")}
+                      </strong>
+                      <br />
+                      {t("formulaInfo.mixedCooking.creationFormulaText")}
+                    </Text>
+                    <br />
+                    <br />
+                    <Text>
+                      <strong>
+                        {t("formulaInfo.mixedCooking.difficultyFormula")}
+                      </strong>
+                      <br />
+                      {t("formulaInfo.mixedCooking.difficultyFormulaText")}
+                    </Text>
+                    <br />
+                    <br />
+                    <Text>
+                      <strong>
+                        {t("formulaInfo.mixedCooking.successConditions")}
+                      </strong>
+                      <br />• {t("formulaInfo.mixedCooking.condition1")}
+                      <br />• {t("formulaInfo.mixedCooking.condition2")}
+                      <br />• {t("formulaInfo.mixedCooking.condition3")}
+                      <br />• {t("formulaInfo.mixedCooking.condition4")}
+                      <br />• {t("formulaInfo.mixedCooking.condition5")}
+                    </Text>
+                  </>
+                )}
+              </Card>
+
+              {/* Materials and Requirements Section */}
+              {selectedItemData.materials &&
+                selectedItemData.materials.length > 0 && (
+                  <Card title={t("materialsSection.title")} size="small">
+                    <Space
+                      direction="vertical"
+                      style={{ width: "100%" }}
+                      size="small"
+                    >
+                      {selectedItemData.book && (
+                        <div>
+                          <Text strong>
+                            {t("materialsSection.requiredBook")}
+                          </Text>
+                          <div
+                            style={{
+                              marginTop: "8px",
+                              padding: "8px",
+                              backgroundColor: "#f5f5f5",
+                              borderRadius: "4px",
+                            }}
+                          >
+                            <Text>{translateText(selectedItemData.book)}</Text>
+                          </div>
+                        </div>
+                      )}
+
+                      <div>
+                        <Text strong>
+                          {t("materialsSection.materialsNeeded")}
+                        </Text>
+                        <div style={{ marginTop: "8px" }}>
+                          <Space
+                            direction="vertical"
+                            style={{ width: "100%" }}
+                            size="small"
+                          >
+                            {selectedItemData.materials.map(
+                              (material, index) => (
+                                <div
+                                  key={index}
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "12px",
+                                    padding: "8px",
+                                    backgroundColor: "#fafafa",
+                                    borderRadius: "4px",
+                                    border: "1px solid #e8e8e8",
+                                  }}
+                                >
+                                  {material.icon && (
+                                    <img
+                                      src={material.icon}
+                                      alt={material.name}
+                                      style={{ width: "24px", height: "24px" }}
+                                    />
+                                  )}
+                                  <div style={{ flex: 1 }}>
+                                    <Text>{translateText(material.name)}</Text>
+                                  </div>
+                                  <div>
+                                    <Text strong>×{material.quantity}</Text>
+                                  </div>
+                                </div>
+                              )
                             )}
-                          </Text>
-                          <br />
-                          <br />
-                          <Text>
-                            <strong>
-                              {t(
-                                "formulaInfo.specialPharmacy.difficultyFormula"
-                              )}
-                            </strong>
-                            <br />
-                            {t(
-                              "formulaInfo.specialPharmacy.difficultyFormulaText"
-                            )}
-                          </Text>
-                          <br />
-                          <br />
-                          <Text>
-                            <strong>
-                              {t(
-                                "formulaInfo.specialPharmacy.successConditions"
-                              )}
-                            </strong>
-                            <br />•{" "}
-                            {t("formulaInfo.specialPharmacy.condition1")}
-                            <br />•{" "}
-                            {t("formulaInfo.specialPharmacy.condition2")}
-                            <br />•{" "}
-                            {t("formulaInfo.specialPharmacy.condition3")}
-                            <br />•{" "}
-                            {t("formulaInfo.specialPharmacy.condition4")}
-                            <br />•{" "}
-                            {t("formulaInfo.specialPharmacy.condition5")}
-                          </Text>
-                        </>
-                      ) : skillUsed === "potion_creation" ? (
-                        <>
-                          <Text>
-                            <strong>
-                              {t(
-                                "formulaInfo.potionCreation.brewingRateFormula"
-                              )}
-                            </strong>
-                            <br />
-                            {t(
-                              "formulaInfo.potionCreation.brewingRateFormulaText"
-                            )}
-                          </Text>
-                          <br />
-                          <br />
-                          <Text>
-                            <strong>
-                              {t("formulaInfo.potionCreation.successCondition")}
-                            </strong>
-                            <br />
-                            {t(
-                              "formulaInfo.potionCreation.successConditionText1"
-                            )}
-                            <br />
-                            {t(
-                              "formulaInfo.potionCreation.successConditionText2"
-                            )}
-                          </Text>
-                        </>
-                      ) : (
-                        <>
-                          <Text>
-                            <strong>
-                              {t("formulaInfo.mixedCooking.creationFormula")}
-                            </strong>
-                            <br />
-                            {t("formulaInfo.mixedCooking.creationFormulaText")}
-                          </Text>
-                          <br />
-                          <br />
-                          <Text>
-                            <strong>
-                              {t("formulaInfo.mixedCooking.difficultyFormula")}
-                            </strong>
-                            <br />
-                            {t(
-                              "formulaInfo.mixedCooking.difficultyFormulaText"
-                            )}
-                          </Text>
-                          <br />
-                          <br />
-                          <Text>
-                            <strong>
-                              {t("formulaInfo.mixedCooking.successConditions")}
-                            </strong>
-                            <br />• {t("formulaInfo.mixedCooking.condition1")}
-                            <br />• {t("formulaInfo.mixedCooking.condition2")}
-                            <br />• {t("formulaInfo.mixedCooking.condition3")}
-                            <br />• {t("formulaInfo.mixedCooking.condition4")}
-                            <br />• {t("formulaInfo.mixedCooking.condition5")}
-                          </Text>
-                        </>
-                      ),
-                  },
-                ]}
-              />
+                          </Space>
+                        </div>
+                      </div>
+                    </Space>
+                  </Card>
+                )}
             </Space>
           )}
 
@@ -2717,74 +2612,6 @@ function App() {
               </div>
             </Card>
           )}
-
-          {/* Materials and Requirements Section */}
-          {selectedItemData.materials &&
-            selectedItemData.materials.length > 0 && (
-              <Card title={t("materialsSection.title")} size="small">
-                <Space
-                  direction="vertical"
-                  style={{ width: "100%" }}
-                  size="small"
-                >
-                  {selectedItemData.book && (
-                    <div>
-                      <Text strong>{t("materialsSection.requiredBook")}</Text>
-                      <div
-                        style={{
-                          marginTop: "8px",
-                          padding: "8px",
-                          backgroundColor: "#f5f5f5",
-                          borderRadius: "4px",
-                        }}
-                      >
-                        <Text>{translateText(selectedItemData.book)}</Text>
-                      </div>
-                    </div>
-                  )}
-
-                  <div>
-                    <Text strong>{t("materialsSection.materialsNeeded")}</Text>
-                    <div style={{ marginTop: "8px" }}>
-                      <Space
-                        direction="vertical"
-                        style={{ width: "100%" }}
-                        size="small"
-                      >
-                        {selectedItemData.materials.map((material, index) => (
-                          <div
-                            key={index}
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: "12px",
-                              padding: "8px",
-                              backgroundColor: "#fafafa",
-                              borderRadius: "4px",
-                              border: "1px solid #e8e8e8",
-                            }}
-                          >
-                            {material.icon && (
-                              <img
-                                src={material.icon}
-                                alt={material.name}
-                                style={{ width: "24px", height: "24px" }}
-                              />
-                            )}
-                            <div style={{ flex: 1 }}>
-                              <Text>{translateText(material.name)}</Text>
-                            </div>
-                            <div>
-                              <Text strong>×{material.quantity}</Text>
-                            </div>
-                          </div>
-                        ))}
-                      </Space>
-                    </div>
-                  </div>
-                </Space>
-              </Card>
-            )}
         </Col>
       </Row>
     </div>
