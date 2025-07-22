@@ -129,22 +129,22 @@ const itemTypes: Record<string, ItemTypeData> = {
     book: "books.howToMakeHighQualityPotion",
     materials: [
       {
-        name: "Empty Test Tube",
+        name: "materials.emptyTestTube",
         quantity: 10,
         icon: "https://irowiki.org/images/db/item/1092.png",
       },
       {
-        name: "White Potion",
+        name: "materials.whitePotion",
         quantity: 20,
         icon: "https://irowiki.org/images/db/item/504.png",
       },
       {
-        name: "White Herb",
+        name: "materials.whiteHerb",
         quantity: 10,
         icon: "https://irowiki.org/images/db/item/509.png",
       },
       {
-        name: "Alcohol",
+        name: "materials.alcohol",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/970.png",
       },
