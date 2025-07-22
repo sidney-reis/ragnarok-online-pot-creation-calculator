@@ -70,11 +70,11 @@ interface ItemTypeData {
 const itemTypes: Record<string, ItemTypeData> = {
   // Special Pharmacy items
   thorn_plant_seed: {
-    name: "Thorn Plant Seed",
+    name: "items.thornPlantSeed",
     itemRate: 30,
     icon: "https://irowiki.org/images/db/item/6210.png",
     skill: "special_pharmacy",
-    book: "How To Grow Plant Genes",
+    book: "books.howToGrowPlantGenes",
     materials: [
       {
         name: "Prickly Fruit",
@@ -84,49 +84,49 @@ const itemTypes: Record<string, ItemTypeData> = {
     ],
   },
   blood_sucker_plant_seed: {
-    name: "Blood Sucker Plant Seed",
+    name: "items.bloodSuckerPlantSeed",
     itemRate: 30,
     icon: "https://irowiki.org/images/db/item/6211.png",
     skill: "special_pharmacy",
-    book: "How To Grow Plant Genes",
+    book: "books.howToGrowPlantGenes",
     materials: [
       {
-        name: "Maneater Root",
+        name: "materials.maneaterRoot",
         quantity: 10,
         icon: "https://irowiki.org/images/db/item/1033.png",
       },
     ],
   },
   bomb_mushroom_spore: {
-    name: "Bomb Mushroom Spore",
+    name: "items.bombMushroomSpore",
     itemRate: 15,
     icon: "https://irowiki.org/images/db/item/6212.png",
     skill: "special_pharmacy",
-    book: "How To Grow Plant Genes",
+    book: "books.howToGrowPlantGenes",
     materials: [
       {
-        name: "Mushroom Spore",
+        name: "materials.mushroomSpore",
         quantity: 10,
         icon: "https://irowiki.org/images/db/item/921.png",
       },
       {
-        name: "Poison Spore",
+        name: "materials.poisonSpore",
         quantity: 5,
         icon: "https://irowiki.org/images/db/item/7033.png",
       },
       {
-        name: "Gun Powder",
+        name: "materials.gunPowder",
         quantity: 2,
         icon: "https://irowiki.org/images/db/item/6244.png",
       },
     ],
   },
   enriched_white_potionz: {
-    name: "Enriched White PotionZ",
+    name: "items.enrichedWhitePotionz",
     itemRate: 10,
     icon: "https://irowiki.org/images/db/item/12428.png",
     skill: "special_pharmacy",
-    book: "How To Make High Quality Potion",
+    book: "books.howToMakeHighQualityPotion",
     materials: [
       {
         name: "Empty Test Tube",
@@ -151,420 +151,420 @@ const itemTypes: Record<string, ItemTypeData> = {
     ],
   },
   vitata500: {
-    name: "Vitata500",
+    name: "items.vitata500",
     itemRate: 20,
     icon: "https://irowiki.org/images/db/item/12436.png",
     skill: "special_pharmacy",
-    book: "How To Make High Quality Potion",
+    book: "books.howToMakeHighQualityPotion",
     materials: [
       {
-        name: "Empty Test Tube",
+        name: "materials.emptyTestTube",
         quantity: 10,
         icon: "https://irowiki.org/images/db/item/1092.png",
       },
       {
-        name: "Grape",
+        name: "materials.grape",
         quantity: 10,
         icon: "https://irowiki.org/images/db/item/514.png",
       },
       {
-        name: "Honey",
+        name: "materials.honey",
         quantity: 10,
         icon: "https://irowiki.org/images/db/item/518.png",
       },
       {
-        name: "Blue Herb",
+        name: "materials.blueHerb",
         quantity: 10,
         icon: "https://irowiki.org/images/db/item/510.png",
       },
     ],
   },
   enrich_celermine_juice: {
-    name: "Enrich Celermine Juice",
+    name: "items.enrichCelermineJuice",
     itemRate: 30,
     icon: "https://irowiki.org/images/db/item/12437.png",
     skill: "special_pharmacy",
-    book: "How To Make High Quality Potion",
+    book: "books.howToMakeHighQualityPotion",
     materials: [
       {
-        name: "Empty Test Tube",
+        name: "materials.emptyTestTube",
         quantity: 10,
         icon: "https://irowiki.org/images/db/item/1092.png",
       },
       {
-        name: "Concentration Potion",
+        name: "materials.concentrationPotion",
         quantity: 5,
         icon: "https://irowiki.org/images/db/item/645.png",
       },
       {
-        name: "Awakening Potion",
+        name: "materials.awakeningPotion",
         quantity: 5,
         icon: "https://irowiki.org/images/db/item/656.png",
       },
       {
-        name: "Spicy Sauce",
+        name: "materials.spicySauce",
         quantity: 5,
         icon: "https://irowiki.org/images/db/item/7455.png",
       },
     ],
   },
   cure_free: {
-    name: "Cure Free",
+    name: "items.cureFree",
     itemRate: 40,
     icon: "https://irowiki.org/images/db/item/12475.png",
     skill: "special_pharmacy",
-    book: "How To Make High Quality Potion",
+    book: "books.howToMakeHighQualityPotion",
     materials: [
       {
-        name: "Empty Test Tube",
+        name: "materials.emptyTestTube",
         quantity: 10,
         icon: "https://irowiki.org/images/db/item/1092.png",
       },
       {
-        name: "Panacea",
+        name: "materials.panacea",
         quantity: 5,
         icon: "https://irowiki.org/images/db/item/525.png",
       },
       {
-        name: "Green Herb",
+        name: "materials.greenHerb",
         quantity: 20,
         icon: "https://irowiki.org/images/db/item/511.png",
       },
       {
-        name: "Mastela Fruit",
+        name: "materials.mastelaFruit",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/522.png",
       },
       {
-        name: "Yggdrasil Leaf",
+        name: "materials.yggdrasilLeaf",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/610.png",
       },
     ],
   },
   concentrated_red_syrup: {
-    name: "Concentrated Red Syrup Potion",
+    name: "items.concentratedRedSyrup",
     itemRate: 100,
     icon: "https://irowiki.org/images/db/item/1100003.png",
     skill: "special_pharmacy",
-    book: "How To Make High Quality Potion",
+    book: "books.howToMakeHighQualityPotion",
     materials: [
       {
-        name: "Empty Potion Bottle",
+        name: "materials.emptyPotionBottle",
         quantity: 5,
         icon: "https://irowiki.org/images/db/item/1093.png",
       },
       {
-        name: "Empty Bottle",
+        name: "materials.emptyBottle",
         quantity: 10,
         icon: "https://irowiki.org/images/db/item/713.png",
       },
       {
-        name: "Red Syrup",
+        name: "materials.redSyrup",
         quantity: 15,
         icon: "https://irowiki.org/images/db/item/11621.png",
       },
     ],
   },
   concentrated_blue_syrup: {
-    name: "Concentrated Blue Syrup Potion",
+    name: "items.concentratedBlueSyrup",
     itemRate: 130,
     icon: "https://irowiki.org/images/db/item/1100004.png",
     skill: "special_pharmacy",
-    book: "How To Make High Quality Potion",
+    book: "books.howToMakeHighQualityPotion",
     materials: [
       {
-        name: "Empty Potion Bottle",
+        name: "materials.emptyPotionBottle",
         quantity: 5,
         icon: "https://irowiki.org/images/db/item/1093.png",
       },
       {
-        name: "Empty Bottle",
+        name: "materials.emptyBottle",
         quantity: 10,
         icon: "https://irowiki.org/images/db/item/713.png",
       },
       {
-        name: "Blue Syrup",
+        name: "materials.blueSyrup",
         quantity: 15,
         icon: "https://irowiki.org/images/db/item/11624.png",
       },
     ],
   },
   concentrated_golden_syrup: {
-    name: "Concentrated Golden Syrup Potion",
+    name: "items.concentratedGoldenSyrup",
     itemRate: 150,
     icon: "https://irowiki.org/images/db/item/1100005.png",
     skill: "special_pharmacy",
-    book: "How To Make High Quality Potion",
+    book: "books.howToMakeHighQualityPotion",
     materials: [
       {
-        name: "Empty Potion Bottle",
+        name: "materials.emptyPotionBottle",
         quantity: 5,
         icon: "https://irowiki.org/images/db/item/1093.png",
       },
       {
-        name: "Empty Bottle",
+        name: "materials.emptyBottle",
         quantity: 10,
         icon: "https://irowiki.org/images/db/item/713.png",
       },
       {
-        name: "White Syrup",
+        name: "materials.whiteSyrup",
         quantity: 10,
         icon: "https://irowiki.org/images/db/item/11623.png",
       },
       {
-        name: "Yellow Syrup",
+        name: "materials.yellowSyrup",
         quantity: 10,
         icon: "https://irowiki.org/images/db/item/11622.png",
       },
     ],
   },
   red_herb_activator: {
-    name: "Red Herb Activator",
+    name: "items.redHerbActivator",
     itemRate: 100,
     icon: "https://irowiki.org/images/db/item/100232.png",
     skill: "special_pharmacy",
-    book: "How To Make High Quality Potion",
+    book: "books.howToMakeHighQualityPotion",
     materials: [
       {
-        name: "Empty Test Tube",
+        name: "materials.emptyTestTube",
         quantity: 10,
         icon: "https://irowiki.org/images/db/item/1092.png",
       },
       {
-        name: "Red Herb",
+        name: "materials.redHerb",
         quantity: 45,
         icon: "https://irowiki.org/images/db/item/507.png",
       },
       {
-        name: "Yggdrasil Seed",
+        name: "materials.yggdrasilSeed",
         quantity: 5,
         icon: "https://irowiki.org/images/db/item/608.png",
       },
     ],
   },
   blue_herb_activator: {
-    name: "Blue Herb Activator",
+    name: "items.blueHerbActivator",
     itemRate: 100,
     icon: "https://irowiki.org/images/db/item/100233.png",
     skill: "special_pharmacy",
-    book: "How To Make High Quality Potion",
+    book: "books.howToMakeHighQualityPotion",
     materials: [
       {
-        name: "Empty Test Tube",
+        name: "materials.emptyTestTube",
         quantity: 10,
         icon: "https://irowiki.org/images/db/item/1092.png",
       },
       {
-        name: "Blue Herb",
+        name: "materials.blueHerb",
         quantity: 15,
         icon: "https://irowiki.org/images/db/item/510.png",
       },
       {
-        name: "Yggdrasil Seed",
+        name: "materials.yggdrasilSeed",
         quantity: 5,
         icon: "https://irowiki.org/images/db/item/608.png",
       },
     ],
   },
   golden_x_potion: {
-    name: "Golden X Potion",
+    name: "items.goldenXPotion",
     itemRate: 145,
     icon: "https://irowiki.org/images/db/item/100231.png",
     skill: "special_pharmacy",
-    book: "How To Make High Quality Potion",
+    book: "books.howToMakeHighQualityPotion",
     materials: [
       {
-        name: "Empty Test Tube",
+        name: "materials.emptyTestTube",
         quantity: 10,
         icon: "https://irowiki.org/images/db/item/1092.png",
       },
       {
-        name: "Yggdrasil Berry",
+        name: "materials.yggdrasilBerry",
         quantity: 10,
         icon: "https://irowiki.org/images/db/item/607.png",
       },
       {
-        name: "Gold",
+        name: "materials.gold",
         quantity: 5,
         icon: "https://irowiki.org/images/db/item/969.png",
       },
     ],
   },
   increase_hp_small: {
-    name: "Increase HP Potion (Small)",
+    name: "items.increaseHpSmall",
     itemRate: 10,
     icon: "https://irowiki.org/images/db/item/12422.png",
     skill: "special_pharmacy",
-    book: "How To Increase Stamina",
+    book: "books.howToIncreaseStamina",
     materials: [
       {
-        name: "Empty Bottle",
+        name: "materials.emptyBottle",
         quantity: 10,
         icon: "https://irowiki.org/images/db/item/713.png",
       },
       {
-        name: "Monster Feed",
+        name: "materials.monsterFeed",
         quantity: 5,
         icon: "https://irowiki.org/images/db/item/528.png",
       },
       {
-        name: "White Herb",
+        name: "materials.whiteHerb",
         quantity: 10,
         icon: "https://irowiki.org/images/db/item/509.png",
       },
       {
-        name: "Spicy Sauce",
+        name: "materials.spicySauce",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/7455.png",
       },
     ],
   },
   increase_hp_medium: {
-    name: "Increase HP Potion (Medium)",
+    name: "items.increaseHpMedium",
     itemRate: 20,
     icon: "https://irowiki.org/images/db/item/12423.png",
     skill: "special_pharmacy",
-    book: "How To Increase Stamina",
+    book: "books.howToIncreaseStamina",
     materials: [
       {
-        name: "Empty Bottle",
+        name: "materials.emptyBottle",
         quantity: 10,
         icon: "https://irowiki.org/images/db/item/713.png",
       },
       {
-        name: "White Herb",
+        name: "materials.whiteHerb",
         quantity: 10,
         icon: "https://irowiki.org/images/db/item/509.png",
       },
       {
-        name: "Yellow Herb",
+        name: "materials.yellowHerb",
         quantity: 10,
         icon: "https://irowiki.org/images/db/item/508.png",
       },
       {
-        name: "Spicy Sauce",
+        name: "materials.spicySauce",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/7455.png",
       },
     ],
   },
   increase_hp_large: {
-    name: "Increase HP Potion (Large)",
+    name: "items.increaseHpLarge",
     itemRate: 40,
     icon: "https://irowiki.org/images/db/item/12424.png",
     skill: "special_pharmacy",
-    book: "How To Increase Stamina",
+    book: "books.howToIncreaseStamina",
     materials: [
       {
-        name: "Empty Bottle",
+        name: "materials.emptyBottle",
         quantity: 10,
         icon: "https://irowiki.org/images/db/item/713.png",
       },
       {
-        name: "White Herb",
+        name: "materials.whiteHerb",
         quantity: 15,
         icon: "https://irowiki.org/images/db/item/509.png",
       },
       {
-        name: "Mastela Fruit",
+        name: "materials.mastelaFruit",
         quantity: 3,
         icon: "https://irowiki.org/images/db/item/522.png",
       },
       {
-        name: "Holy Water",
+        name: "materials.holyWater",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/523.png",
       },
       {
-        name: "Spicy Sauce",
+        name: "materials.spicySauce",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/7455.png",
       },
     ],
   },
   increase_sp_small: {
-    name: "Increase SP Potion (Small)",
+    name: "items.increaseSpSmall",
     itemRate: 10,
     icon: "https://irowiki.org/images/db/item/12425.png",
     skill: "special_pharmacy",
-    book: "How To Increase Vitality",
+    book: "books.howToIncreaseVitality",
     materials: [
       {
-        name: "Empty Bottle",
+        name: "materials.emptyBottle",
         quantity: 10,
         icon: "https://irowiki.org/images/db/item/713.png",
       },
       {
-        name: "Lemon",
+        name: "materials.lemon",
         quantity: 10,
         icon: "https://irowiki.org/images/db/item/568.png",
       },
       {
-        name: "Grape",
+        name: "materials.grape",
         quantity: 10,
         icon: "https://irowiki.org/images/db/item/514.png",
       },
       {
-        name: "Sweet Sauce",
+        name: "materials.sweetSauce",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/7453.png",
       },
     ],
   },
   increase_sp_medium: {
-    name: "Increase SP Potion (Medium)",
+    name: "items.increaseSpMedium",
     itemRate: 15,
     icon: "https://irowiki.org/images/db/item/12426.png",
     skill: "special_pharmacy",
-    book: "How To Increase Vitality",
+    book: "books.howToIncreaseVitality",
     materials: [
       {
-        name: "Empty Bottle",
+        name: "materials.emptyBottle",
         quantity: 10,
         icon: "https://irowiki.org/images/db/item/713.png",
       },
       {
-        name: "Honey",
+        name: "materials.honey",
         quantity: 10,
         icon: "https://irowiki.org/images/db/item/518.png",
       },
       {
-        name: "Blue Herb",
+        name: "materials.blueHerb",
         quantity: 10,
         icon: "https://irowiki.org/images/db/item/510.png",
       },
       {
-        name: "Sweet Sauce",
+        name: "materials.sweetSauce",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/7453.png",
       },
     ],
   },
   increase_sp_large: {
-    name: "Increase SP Potion (Large)",
+    name: "items.increaseSpLarge",
     itemRate: 20,
     icon: "https://irowiki.org/images/db/item/12427.png",
     skill: "special_pharmacy",
-    book: "How To Increase Vitality",
+    book: "books.howToIncreaseVitality",
     materials: [
       {
-        name: "Empty Bottle",
+        name: "materials.emptyBottle",
         quantity: 10,
         icon: "https://irowiki.org/images/db/item/713.png",
       },
       {
-        name: "Royal Jelly",
+        name: "materials.royalJelly",
         quantity: 10,
         icon: "https://irowiki.org/images/db/item/526.png",
       },
       {
-        name: "Blue Herb",
+        name: "materials.blueHerb",
         quantity: 15,
         icon: "https://irowiki.org/images/db/item/510.png",
       },
       {
-        name: "Sweet Sauce",
+        name: "materials.sweetSauce",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/7453.png",
       },
@@ -572,594 +572,594 @@ const itemTypes: Record<string, ItemTypeData> = {
   },
   // Potion Creation items
   red_potion: {
-    name: "Red Potion",
+    name: "items.redPotion",
     potionRate: 20, // +15% ~ +25% average
     icon: "https://irowiki.org/images/db/item/501.png",
     skill: "potion_creation",
-    book: "Potion Creation Guide",
+    book: "books.potionCreationGuide",
     materials: [
       {
-        name: "Medicine Bowl",
+        name: "materials.medicineBowl",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/7134.png",
       },
       {
-        name: "Empty Potion Bottle",
+        name: "materials.emptyPotionBottle",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/1093.png",
       },
       {
-        name: "Red Herb",
+        name: "materials.redHerb",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/507.png",
       },
     ],
   },
   yellow_potion: {
-    name: "Yellow Potion",
+    name: "items.yellowPotion",
     potionRate: 20, // +15% ~ +25% average
     icon: "https://irowiki.org/images/db/item/503.png",
     skill: "potion_creation",
-    book: "Potion Creation Guide",
+    book: "books.potionCreationGuide",
     materials: [
       {
-        name: "Medicine Bowl",
+        name: "materials.medicineBowl",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/7134.png",
       },
       {
-        name: "Empty Potion Bottle",
+        name: "materials.emptyPotionBottle",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/1093.png",
       },
       {
-        name: "Yellow Herb",
+        name: "materials.yellowHerb",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/508.png",
       },
     ],
   },
   white_potion: {
-    name: "White Potion",
+    name: "items.whitePotion",
     potionRate: 20, // +15% ~ +25% average
     icon: "https://irowiki.org/images/db/item/504.png",
     skill: "potion_creation",
-    book: "Potion Creation Guide",
+    book: "books.potionCreationGuide",
     materials: [
       {
-        name: "Medicine Bowl",
+        name: "materials.medicineBowl",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/7134.png",
       },
       {
-        name: "Empty Potion Bottle",
+        name: "materials.emptyPotionBottle",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/1093.png",
       },
       {
-        name: "White Herb",
+        name: "materials.whiteHerb",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/509.png",
       },
     ],
   },
   blue_potion: {
-    name: "Blue Potion",
+    name: "items.bluePotion",
     potionRate: -5,
     icon: "https://irowiki.org/images/db/item/505.png",
     skill: "potion_creation",
-    book: "Potion Creation Guide",
+    book: "books.potionCreationGuide",
     materials: [
       {
-        name: "Medicine Bowl",
+        name: "materials.medicineBowl",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/7134.png",
       },
       {
-        name: "Empty Potion Bottle",
+        name: "materials.emptyPotionBottle",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/1093.png",
       },
       {
-        name: "Blue Herb",
+        name: "materials.blueHerb",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/510.png",
       },
       {
-        name: "Scell",
+        name: "materials.scell",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/911.png",
       },
     ],
   },
   anodyne: {
-    name: "Anodyne",
+    name: "items.anodyne",
     potionRate: -5,
     icon: "https://irowiki.org/images/db/item/605.png",
     skill: "potion_creation",
-    book: "Potion Creation Guide",
+    book: "books.potionCreationGuide",
     materials: [
       {
-        name: "Medicine Bowl",
+        name: "materials.medicineBowl",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/7134.png",
       },
       {
-        name: "Empty Bottle",
+        name: "materials.emptyBottle",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/713.png",
       },
       {
-        name: "Alcohol",
+        name: "materials.alcohol",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/970.png",
       },
       {
-        name: "Ment",
+        name: "materials.ment",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/708.png",
       },
     ],
   },
   aloevera: {
-    name: "Aloevera",
+    name: "items.aloevera",
     potionRate: -5,
     icon: "https://irowiki.org/images/db/item/606.png",
     skill: "potion_creation",
-    book: "Potion Creation Guide",
+    book: "books.potionCreationGuide",
     materials: [
       {
-        name: "Medicine Bowl",
+        name: "materials.medicineBowl",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/7134.png",
       },
       {
-        name: "Empty Bottle",
+        name: "materials.emptyBottle",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/713.png",
       },
       {
-        name: "Honey",
+        name: "materials.honey",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/518.png",
       },
       {
-        name: "Aloe",
+        name: "materials.aloe",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/704.png",
       },
     ],
   },
   alcohol: {
-    name: "Alcohol",
+    name: "items.alcohol",
     potionRate: 10, // +5% ~ +15% average
     icon: "https://irowiki.org/images/db/item/970.png",
     skill: "potion_creation",
-    book: "Alcohol Creation Guide",
+    book: "books.alcoholCreationGuide",
     materials: [
       {
-        name: "Medicine Bowl",
+        name: "materials.medicineBowl",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/7134.png",
       },
       {
-        name: "Empty Test Tube",
+        name: "materials.emptyTestTube",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/1092.png",
       },
       {
-        name: "Empty Bottle",
+        name: "materials.emptyBottle",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/713.png",
       },
       {
-        name: "Stem",
+        name: "materials.stem",
         quantity: 5,
         icon: "https://irowiki.org/images/db/item/905.png",
       },
       {
-        name: "Poison Spore",
+        name: "materials.poisonSpore",
         quantity: 5,
         icon: "https://irowiki.org/images/db/item/7033.png",
       },
     ],
   },
   embryo: {
-    name: "Embryo",
+    name: "items.embryo",
     potionRate: -5,
     icon: "https://irowiki.org/images/db/item/7142.png",
     skill: "potion_creation",
-    book: "Potion Creation Guide",
+    book: "books.potionCreationGuide",
     materials: [
       {
-        name: "Medicine Bowl",
+        name: "materials.medicineBowl",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/7134.png",
       },
       {
-        name: "Morning Dew of Yggdrasil",
+        name: "materials.morningDewOfYggdrasil",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/7141.png",
       },
       {
-        name: "Seed of Life",
+        name: "materials.seedOfLife",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/7140.png",
       },
       {
-        name: "Glass Tube",
+        name: "materials.glassTube",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/7143.png",
       },
     ],
   },
   homunculus_tablet: {
-    name: "Homunculus Tablet",
+    name: "items.homunculusTablet",
     potionRate: -5,
     icon: "https://irowiki.org/images/db/item/100371.png",
     skill: "potion_creation",
-    book: "Potion Creation Guide",
+    book: "books.potionCreationGuide",
     materials: [
       {
-        name: "Medicine Bowl",
+        name: "materials.medicineBowl",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/7134.png",
       },
       {
-        name: "Yellow Herb",
+        name: "materials.yellowHerb",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/508.png",
       },
       {
-        name: "Seed of Life",
+        name: "materials.seedOfLife",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/7140.png",
       },
       {
-        name: "Empty Bottle",
+        name: "materials.emptyBottle",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/713.png",
       },
     ],
   },
   condensed_red_potion: {
-    name: "Condensed Red Potion",
+    name: "items.condensedRedPotion",
     potionRate: -5,
     icon: "https://irowiki.org/images/db/item/545.png",
     skill: "potion_creation",
-    book: "Condensed Potion Creation Guide",
+    book: "books.condensedPotionCreationGuide",
     materials: [
       {
-        name: "Medicine Bowl",
+        name: "materials.medicineBowl",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/7134.png",
       },
       {
-        name: "Empty Test Tube",
+        name: "materials.emptyTestTube",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/1092.png",
       },
       {
-        name: "Red Potion",
+        name: "materials.redPotion",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/501.png",
       },
       {
-        name: "Cactus Needle",
+        name: "materials.cactusNeedle",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/952.png",
       },
     ],
   },
   condensed_yellow_potion: {
-    name: "Condensed Yellow Potion",
+    name: "items.condensedYellowPotion",
     potionRate: -7, // -10% ~ -5% average
     icon: "https://irowiki.org/images/db/item/546.png",
     skill: "potion_creation",
-    book: "Condensed Potion Creation Guide",
+    book: "books.condensedPotionCreationGuide",
     materials: [
       {
-        name: "Medicine Bowl",
+        name: "materials.medicineBowl",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/7134.png",
       },
       {
-        name: "Empty Test Tube",
+        name: "materials.emptyTestTube",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/1092.png",
       },
       {
-        name: "Yellow Potion",
+        name: "materials.yellowPotion",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/503.png",
       },
       {
-        name: "Mole Whiskers",
+        name: "materials.moleWhiskers",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/1017.png",
       },
     ],
   },
   condensed_white_potion: {
-    name: "Condensed White Potion",
+    name: "items.condensedWhitePotion",
     potionRate: -10, // -15% ~ -5% average
     icon: "https://irowiki.org/images/db/item/547.png",
     skill: "potion_creation",
-    book: "Condensed Potion Creation Guide",
+    book: "books.condensedPotionCreationGuide",
     materials: [
       {
-        name: "Medicine Bowl",
+        name: "materials.medicineBowl",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/7134.png",
       },
       {
-        name: "Empty Test Tube",
+        name: "materials.emptyTestTube",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/1092.png",
       },
       {
-        name: "White Potion",
+        name: "materials.whitePotion",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/504.png",
       },
       {
-        name: "Witch Starsand",
+        name: "materials.witchStarsand",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/1061.png",
       },
     ],
   },
   acid_bottle: {
-    name: "Acid Bottle",
+    name: "items.acidBottle",
     potionRate: 0, // -5% ~ +5% average
     icon: "https://irowiki.org/images/db/item/7136.png",
     skill: "potion_creation",
-    book: "Acid Bottle Creation Guide",
+    book: "books.acidBottleCreationGuide",
     materials: [
       {
-        name: "Medicine Bowl",
+        name: "materials.medicineBowl",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/7134.png",
       },
       {
-        name: "Empty Bottle",
+        name: "materials.emptyBottle",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/713.png",
       },
       {
-        name: "Immortal Heart",
+        name: "materials.immortalHeart",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/929.png",
       },
     ],
   },
   bottle_grenade: {
-    name: "Bottle Grenade",
+    name: "items.bottleGrenade",
     potionRate: 0, // -5% ~ +5% average
     icon: "https://irowiki.org/images/db/item/7135.png",
     skill: "potion_creation",
-    book: "Bottle Grenade Creation Guide",
+    book: "books.bottleGrenadeCreationGuide",
     materials: [
       {
-        name: "Medicine Bowl",
+        name: "materials.medicineBowl",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/7134.png",
       },
       {
-        name: "Empty Bottle",
+        name: "materials.emptyBottle",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/713.png",
       },
       {
-        name: "Fabric",
+        name: "materials.fabric",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/1059.png",
       },
       {
-        name: "Alcohol",
+        name: "materials.alcohol",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/970.png",
       },
     ],
   },
   marine_sphere_bottle: {
-    name: "Marine Sphere Bottle",
+    name: "items.marineSphereBottle",
     potionRate: 0, // -5% ~ +5% average
     icon: "https://irowiki.org/images/db/item/7138.png",
     skill: "potion_creation",
-    book: "Marine Sphere Creation Guide",
+    book: "books.marineSphereCreationGuide",
     materials: [
       {
-        name: "Medicine Bowl",
+        name: "materials.medicineBowl",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/7134.png",
       },
       {
-        name: "Empty Bottle",
+        name: "materials.emptyBottle",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/713.png",
       },
       {
-        name: "Tendon",
+        name: "materials.tendon",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/1050.png",
       },
       {
-        name: "Detonator",
+        name: "materials.detonator",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/1051.png",
       },
     ],
   },
   plant_bottle: {
-    name: "Plant Bottle",
+    name: "items.plantBottle",
     potionRate: 0, // -5% ~ +5% average
     icon: "https://irowiki.org/images/db/item/7137.png",
     skill: "potion_creation",
-    book: "Plant Bottle Creation Guide",
+    book: "books.plantBottleCreationGuide",
     materials: [
       {
-        name: "Medicine Bowl",
+        name: "materials.medicineBowl",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/7134.png",
       },
       {
-        name: "Empty Bottle",
+        name: "materials.emptyBottle",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/713.png",
       },
       {
-        name: "Maneater Blossom",
+        name: "materials.maneaterBlossom",
         quantity: 2,
         icon: "https://irowiki.org/images/db/item/1032.png",
       },
     ],
   },
   glistening_coat: {
-    name: "Glistening Coat",
+    name: "items.glisteningCoat",
     potionRate: -10, // -15% ~ -5% average
     icon: "https://irowiki.org/images/db/item/7139.png",
     skill: "potion_creation",
-    book: "Glistening Coat Creation Guide",
+    book: "books.glisteningCoatCreationGuide",
     materials: [
       {
-        name: "Medicine Bowl",
+        name: "materials.medicineBowl",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/7134.png",
       },
       {
-        name: "Empty Bottle",
+        name: "materials.emptyBottle",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/713.png",
       },
       {
-        name: "Mermaid's Heart",
+        name: "materials.mermaidHeart",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/950.png",
       },
       {
-        name: "Zenorc's Fang",
+        name: "materials.zenorcFang",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/1044.png",
       },
       {
-        name: "Alcohol",
+        name: "materials.alcohol",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/970.png",
       },
     ],
   },
   coldproof_potion: {
-    name: "Coldproof Potion",
+    name: "items.coldproofPotion",
     potionRate: -5,
     icon: "https://irowiki.org/images/db/item/12119.png",
     skill: "potion_creation",
-    book: "Elemental Potion Creation Guide",
+    book: "books.elementalPotionCreationGuide",
     materials: [
       {
-        name: "Medicine Bowl",
+        name: "materials.medicineBowl",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/7134.png",
       },
       {
-        name: "Empty Potion Bottle",
+        name: "materials.emptyPotionBottle",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/1093.png",
       },
       {
-        name: "Blue Gemstone",
+        name: "materials.blueGemstone",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/717.png",
       },
       {
-        name: "Mermaid's Heart",
+        name: "materials.mermaidHeart",
         quantity: 3,
         icon: "https://irowiki.org/images/db/item/950.png",
       },
     ],
   },
   earthproof_potion: {
-    name: "Earthproof Potion",
+    name: "items.earthproofPotion",
     potionRate: -5,
     icon: "https://irowiki.org/images/db/item/12120.png",
     skill: "potion_creation",
-    book: "Elemental Potion Creation Guide",
+    book: "books.elementalPotionCreationGuide",
     materials: [
       {
-        name: "Medicine Bowl",
+        name: "materials.medicineBowl",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/7134.png",
       },
       {
-        name: "Empty Potion Bottle",
+        name: "materials.emptyPotionBottle",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/1093.png",
       },
       {
-        name: "Yellow Gemstone",
+        name: "materials.yellowGemstone",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/715.png",
       },
       {
-        name: "Large Jellopy",
+        name: "materials.largeJellopy",
         quantity: 2,
         icon: "https://irowiki.org/images/db/item/7126.png",
       },
     ],
   },
   thunderproof_potion: {
-    name: "Thunderproof Potion",
+    name: "items.thunderproofPotion",
     potionRate: -5,
     icon: "https://irowiki.org/images/db/item/12121.png",
     skill: "potion_creation",
-    book: "Elemental Potion Creation Guide",
+    book: "books.elementalPotionCreationGuide",
     materials: [
       {
-        name: "Medicine Bowl",
+        name: "materials.medicineBowl",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/7134.png",
       },
       {
-        name: "Empty Potion Bottle",
+        name: "materials.emptyPotionBottle",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/1093.png",
       },
       {
-        name: "Blue Gemstone",
+        name: "materials.blueGemstone",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/717.png",
       },
       {
-        name: "Moth Dust",
+        name: "materials.mothDust",
         quantity: 3,
         icon: "https://irowiki.org/images/db/item/1057.png",
       },
     ],
   },
   fireproof_potion: {
-    name: "Fireproof Potion",
+    name: "items.fireproofPotion",
     potionRate: -5,
     icon: "https://irowiki.org/images/db/item/12118.png",
     skill: "potion_creation",
-    book: "Elemental Potion Creation Guide",
+    book: "books.elementalPotionCreationGuide",
     materials: [
       {
-        name: "Medicine Bowl",
+        name: "materials.medicineBowl",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/7134.png",
       },
       {
-        name: "Empty Potion Bottle",
+        name: "materials.emptyPotionBottle",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/1093.png",
       },
       {
-        name: "Red Gemstone",
+        name: "materials.redGemstone",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/716.png",
       },
       {
-        name: "Frill",
+        name: "materials.frill",
         quantity: 2,
         icon: "https://irowiki.org/images/db/item/1012.png",
       },
@@ -1167,174 +1167,174 @@ const itemTypes: Record<string, ItemTypeData> = {
   },
   // Mixed Cooking items
   savage_bbq: {
-    name: "Savage BBQ",
+    name: "items.savageBbq",
     itemRate: 15,
     icon: "https://irowiki.org/images/db/item/12429.png",
     skill: "mixed_cooking",
-    book: "Cooking Book: Mix Cooking",
+    book: "books.cookingBookMixCooking",
     materials: [
       {
-        name: "Melange Pot",
+        name: "materials.melangePot",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/6248.png",
       },
       {
-        name: "Cooking Skewer",
+        name: "materials.cookingSkewer",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/6250.png",
       },
       {
-        name: "Black Charcoal",
+        name: "materials.blackCharcoal",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/6251.png",
       },
       {
-        name: "Savage Meat",
+        name: "materials.savageMeat",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/6249.png",
       },
     ],
   },
   warg_blood_cocktail: {
-    name: "Warg Blood Cocktail",
+    name: "items.wargBloodCocktail",
     itemRate: 15,
     icon: "https://irowiki.org/images/db/item/12430.png",
     skill: "mixed_cooking",
-    book: "Cooking Book: Mix Cooking",
+    book: "books.cookingBookMixCooking",
     materials: [
       {
-        name: "Melange Pot",
+        name: "materials.melangePot",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/6248.png",
       },
       {
-        name: "Cold Ice",
+        name: "materials.coldIce",
         quantity: 2,
         icon: "https://irowiki.org/images/db/item/6253.png",
       },
       {
-        name: "Blood Of Wolf",
+        name: "materials.bloodOfWolf",
         quantity: 3,
         icon: "https://irowiki.org/images/db/item/6252.png",
       },
     ],
   },
   minor_brisket: {
-    name: "Minor Brisket",
+    name: "items.minorBrisket",
     itemRate: 15,
     icon: "https://irowiki.org/images/db/item/12431.png",
     skill: "mixed_cooking",
-    book: "Cooking Book: Mix Cooking",
+    book: "books.cookingBookMixCooking",
     materials: [
       {
-        name: "Melange Pot",
+        name: "materials.melangePot",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/6248.png",
       },
       {
-        name: "Large Cookpot",
+        name: "materials.largeCookpot",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/6255.png",
       },
       {
-        name: "Beef Head",
+        name: "materials.beefHead",
         quantity: 2,
         icon: "https://irowiki.org/images/db/item/6254.png",
       },
     ],
   },
   siroma_icetea: {
-    name: "Siroma Icetea",
+    name: "items.siromaIcetea",
     itemRate: 15,
     icon: "https://irowiki.org/images/db/item/12432.png",
     skill: "mixed_cooking",
-    book: "Cooking Book: Mix Cooking",
+    book: "books.cookingBookMixCooking",
     materials: [
       {
-        name: "Melange Pot",
+        name: "materials.melangePot",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/6248.png",
       },
       {
-        name: "Comodo Tropical Fruit",
+        name: "materials.comodoTropicalFruit",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/6258.png",
       },
       {
-        name: "Ice Crystal",
+        name: "materials.iceCrystal",
         quantity: 2,
         icon: "https://irowiki.org/images/db/item/6257.png",
       },
       {
-        name: "Ice Piece",
+        name: "materials.icePiece",
         quantity: 3,
         icon: "https://irowiki.org/images/db/item/6256.png",
       },
     ],
   },
   drosera_herb_stew: {
-    name: "Drosera Herb Stew",
+    name: "items.droseraHerbStew",
     itemRate: 15,
     icon: "https://irowiki.org/images/db/item/12433.png",
     skill: "mixed_cooking",
-    book: "Cooking Book: Mix Cooking",
+    book: "books.cookingBookMixCooking",
     materials: [
       {
-        name: "Melange Pot",
+        name: "materials.melangePot",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/6248.png",
       },
       {
-        name: "Large Cookpot",
+        name: "materials.largeCookpot",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/6255.png",
       },
       {
-        name: "Red Herb",
+        name: "materials.redHerb",
         quantity: 3,
         icon: "https://irowiki.org/images/db/item/507.png",
       },
       {
-        name: "White Herb",
+        name: "materials.whiteHerb",
         quantity: 3,
         icon: "https://irowiki.org/images/db/item/509.png",
       },
       {
-        name: "Blue Herb",
+        name: "materials.blueHerb",
         quantity: 3,
         icon: "https://irowiki.org/images/db/item/510.png",
       },
       {
-        name: "Drosera Tentacle",
+        name: "materials.droseraTenatcle",
         quantity: 3,
         icon: "https://irowiki.org/images/db/item/6259.png",
       },
     ],
   },
   petite_tail_noodles: {
-    name: "Petite Tail Noodles",
+    name: "items.petiteTailNoodles",
     itemRate: 15,
     icon: "https://irowiki.org/images/db/item/12434.png",
     skill: "mixed_cooking",
-    book: "Cooking Book: Mix Cooking",
+    book: "books.cookingBookMixCooking",
     materials: [
       {
-        name: "Melange Pot",
+        name: "materials.melangePot",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/6248.png",
       },
       {
-        name: "Cool Gravy",
+        name: "materials.coolGravy",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/6262.png",
       },
       {
-        name: "Fine Noodle",
+        name: "materials.fineNoodle",
         quantity: 1,
         icon: "https://irowiki.org/images/db/item/6261.png",
       },
       {
-        name: "Petite's Tail",
+        name: "materials.petiteTail",
         quantity: 2,
         icon: "https://irowiki.org/images/db/item/6260.png",
       },
@@ -1647,6 +1647,18 @@ function App() {
     i18n.changeLanguage(language);
   };
 
+  // Helper function to translate item names and book names
+  const translateText = (text: string): string => {
+    if (
+      text.startsWith("items.") ||
+      text.startsWith("books.") ||
+      text.startsWith("materials.")
+    ) {
+      return t(text);
+    }
+    return text;
+  };
+
   return (
     <div style={{ padding: "24px", maxWidth: "1400px", margin: "0 auto" }}>
       <div
@@ -1771,10 +1783,10 @@ function App() {
                     const rate = value.itemRate || value.potionRate || 0;
                     const skillName =
                       value.skill === "special_pharmacy"
-                        ? "Special Pharmacy"
+                        ? t("itemSelection.specialPharmacy")
                         : value.skill === "potion_creation"
-                        ? "Potion Creation"
-                        : "Mixed Cooking";
+                        ? t("itemSelection.potionCreation")
+                        : t("itemSelection.mixedCooking");
                     const isSelected = selectedItemType === key;
 
                     return (
@@ -1805,7 +1817,7 @@ function App() {
                           />
                           <div style={{ flex: 1 }}>
                             <div style={{ fontWeight: "bold" }}>
-                              {value.name}
+                              {translateText(value.name)}
                             </div>
                             <div style={{ color: "#666", fontSize: "12px" }}>
                               {skillName}
@@ -2275,7 +2287,7 @@ function App() {
                           borderRadius: "4px",
                         }}
                       >
-                        <Text>{selectedItemData.book}</Text>
+                        <Text>{translateText(selectedItemData.book)}</Text>
                       </div>
                     </div>
                   )}
@@ -2309,7 +2321,7 @@ function App() {
                               />
                             )}
                             <div style={{ flex: 1 }}>
-                              <Text>{material.name}</Text>
+                              <Text>{translateText(material.name)}</Text>
                             </div>
                             <div>
                               <Text strong>×{material.quantity}</Text>
