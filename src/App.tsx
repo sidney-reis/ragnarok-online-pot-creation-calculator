@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Form,
   InputNumber,
@@ -11,6 +11,9 @@ import {
   Divider,
   Alert,
   Statistic,
+  Input,
+  Select,
+  Collapse,
 } from "antd";
 import "./App.css";
 
@@ -310,6 +313,8 @@ interface SimulationResult {
   skill: "special_pharmacy" | "potion_creation";
 }
 
+const STORAGE_KEY = "ragnarok-potion-simulator";
+
 function App() {
   const [form] = Form.useForm();
   const [results, setResults] = useState<SimulationResult[]>([]);
@@ -317,6 +322,68 @@ function App() {
   const [selectedItemType, setSelectedItemType] = useState<string>(
     "enriched_white_potionz"
   );
+  const [searchText, setSearchText] = useState<string>("");
+  const [skillFilter, setSkillFilter] = useState<string>("all");
+  const [isFormulaCollapsed, setIsFormulaCollapsed] = useState<boolean>(true);
+
+  // Load saved data from localStorage
+  const loadSavedData = () => {
+    try {
+      const savedData = localStorage.getItem(STORAGE_KEY);
+      if (savedData) {
+        const parsedData = JSON.parse(savedData);
+        return parsedData;
+      }
+    } catch (error) {
+      console.error("Error loading saved data:", error);
+    }
+    return null;
+  };
+
+  // Save data to localStorage
+  const saveData = (data: {
+    selectedItemType: string;
+    formValues: Partial<FormValues>;
+    isFormulaCollapsed: boolean;
+  }) => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    } catch (error) {
+      console.error("Error saving data:", error);
+    }
+  };
+
+  // Initialize form with saved data
+  useEffect(() => {
+    const savedData = loadSavedData();
+    if (savedData) {
+      // Set selected item type
+      if (savedData.selectedItemType) {
+        setSelectedItemType(savedData.selectedItemType);
+      }
+
+      // Set form values
+      if (savedData.formValues) {
+        form.setFieldsValue(savedData.formValues);
+      }
+
+      // Set formula collapse preference
+      if (typeof savedData.isFormulaCollapsed === "boolean") {
+        setIsFormulaCollapsed(savedData.isFormulaCollapsed);
+      }
+    }
+  }, [form]);
+
+  // Save data whenever form values or selected item changes
+  useEffect(() => {
+    const formValues = form.getFieldsValue();
+    const dataToSave = {
+      selectedItemType,
+      formValues,
+      isFormulaCollapsed,
+    };
+    saveData(dataToSave);
+  }, [selectedItemType, isFormulaCollapsed, form]);
 
   const getRandomInRange = (min: number, max: number): number => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -471,6 +538,23 @@ function App() {
     form.setFieldValue("itemType", itemKey);
   };
 
+  // Filter items based on search text and skill filter
+  const getFilteredItems = () => {
+    return Object.entries(itemTypes).filter(([, value]) => {
+      // Text search filter
+      const matchesSearch = value.name
+        .toLowerCase()
+        .includes(searchText.toLowerCase());
+
+      // Skill filter
+      const matchesSkill = skillFilter === "all" || value.skill === skillFilter;
+
+      return matchesSearch && matchesSkill;
+    });
+  };
+
+  const filteredItems = getFilteredItems();
+
   return (
     <div style={{ padding: "24px", maxWidth: "1400px", margin: "0 auto" }}>
       <Title level={1} style={{ textAlign: "center", marginBottom: "32px" }}>
@@ -480,65 +564,131 @@ function App() {
       <Row gutter={[24, 24]}>
         <Col xs={24} lg={8}>
           <Card title="Select Item to Create" size="small">
-            <div style={{ maxHeight: "600px", overflowY: "auto" }}>
+            <Space direction="vertical" style={{ width: "100%" }} size="small">
+              <Input
+                placeholder="Search items..."
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
+                allowClear
+              />
+              <Select
+                style={{ width: "100%" }}
+                placeholder="Filter by skill"
+                value={skillFilter}
+                onChange={setSkillFilter}
+                optionRender={(option) => {
+                  if (option.value === "all") {
+                    return <span>All Skills</span>;
+                  }
+                  const iconUrl =
+                    option.value === "special_pharmacy"
+                      ? "https://irowiki.org/w/images/1/13/Special_Pharmacy.png"
+                      : "https://irowiki.org/w/images/5/53/Prepare_Potion.png";
+                  const skillName =
+                    option.value === "special_pharmacy"
+                      ? "Special Pharmacy"
+                      : "Potion Creation";
+
+                  return (
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                      }}
+                    >
+                      <img
+                        src={iconUrl}
+                        alt={skillName}
+                        style={{ width: "16px", height: "16px" }}
+                      />
+                      <span>{skillName}</span>
+                    </div>
+                  );
+                }}
+                options={[
+                  { value: "all", label: "All Skills" },
+                  { value: "special_pharmacy", label: "Special Pharmacy" },
+                  { value: "potion_creation", label: "Potion Creation" },
+                ]}
+              />
+            </Space>
+
+            <Divider style={{ margin: "12px 0" }} />
+
+            <div style={{ maxHeight: "500px", overflowY: "auto" }}>
               <Space
                 direction="vertical"
                 style={{ width: "100%" }}
                 size="small"
               >
-                {Object.entries(itemTypes).map(([key, value]) => {
-                  const rate = value.itemRate || value.potionRate || 0;
-                  const skillName =
-                    value.skill === "special_pharmacy"
-                      ? "Special Pharmacy"
-                      : "Potion Creation";
-                  const isSelected = selectedItemType === key;
+                {filteredItems.length === 0 ? (
+                  <div
+                    style={{
+                      textAlign: "center",
+                      padding: "20px",
+                      color: "#999",
+                    }}
+                  >
+                    No items found matching your search criteria
+                  </div>
+                ) : (
+                  filteredItems.map(([key, value]) => {
+                    const rate = value.itemRate || value.potionRate || 0;
+                    const skillName =
+                      value.skill === "special_pharmacy"
+                        ? "Special Pharmacy"
+                        : "Potion Creation";
+                    const isSelected = selectedItemType === key;
 
-                  return (
-                    <Card
-                      key={key}
-                      size="small"
-                      hoverable
-                      onClick={() => handleItemSelect(key)}
-                      style={{
-                        cursor: "pointer",
-                        border: isSelected
-                          ? "2px solid #1890ff"
-                          : "1px solid #d9d9d9",
-                        backgroundColor: isSelected ? "#f0f8ff" : "white",
-                      }}
-                    >
-                      <div
+                    return (
+                      <Card
+                        key={key}
+                        size="small"
+                        hoverable
+                        onClick={() => handleItemSelect(key)}
                         style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "12px",
+                          cursor: "pointer",
+                          border: isSelected
+                            ? "2px solid #1890ff"
+                            : "1px solid #d9d9d9",
+                          backgroundColor: isSelected ? "#f0f8ff" : "white",
                         }}
                       >
-                        <img
-                          src={value.icon}
-                          alt={value.name}
-                          style={{ width: "32px", height: "32px" }}
-                        />
-                        <div style={{ flex: 1 }}>
-                          <div style={{ fontWeight: "bold" }}>{value.name}</div>
-                          <div style={{ color: "#666", fontSize: "12px" }}>
-                            {skillName}
-                          </div>
-                          <div
-                            style={{
-                              color: rate >= 0 ? "#52c41a" : "#ff4d4f",
-                              fontSize: "12px",
-                            }}
-                          >
-                            Rate: {rate > 0 ? "+" : ""}
-                            {rate}
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "12px",
+                          }}
+                        >
+                          <img
+                            src={value.icon}
+                            alt={value.name}
+                            style={{ width: "32px", height: "32px" }}
+                          />
+                          <div style={{ flex: 1 }}>
+                            <div style={{ fontWeight: "bold" }}>
+                              {value.name}
+                            </div>
+                            <div style={{ color: "#666", fontSize: "12px" }}>
+                              {skillName}
+                            </div>
+                            <div
+                              style={{
+                                color: rate >= 0 ? "#52c41a" : "#ff4d4f",
+                                fontSize: "12px",
+                              }}
+                            >
+                              Rate: {rate > 0 ? "+" : ""}
+                              {rate}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </Card>
-                  );
-                })}
+                      </Card>
+                    );
+                  })
+                )}
               </Space>
             </div>
           </Card>
@@ -557,6 +707,18 @@ function App() {
               form={form}
               layout="vertical"
               onFinish={onFinish}
+              onValuesChange={() => {
+                // Save form data whenever any field changes
+                setTimeout(() => {
+                  const formValues = form.getFieldsValue();
+                  const dataToSave = {
+                    selectedItemType,
+                    formValues,
+                    isFormulaCollapsed,
+                  };
+                  saveData(dataToSave);
+                }, 100);
+              }}
               initialValues={{
                 int: 99,
                 dex: 99,
@@ -721,7 +883,7 @@ function App() {
             <Space direction="vertical" style={{ width: "100%" }} size="large">
               <Card title="Simulation Results" size="small">
                 <Row gutter={16}>
-                  <Col span={8}>
+                  <Col span={24}>
                     <Statistic
                       title="Skill Used"
                       value={
@@ -729,16 +891,43 @@ function App() {
                           ? "Special Pharmacy"
                           : "Potion Creation"
                       }
+                      formatter={(value) => (
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "8px",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <img
+                            src={
+                              skillUsed === "special_pharmacy"
+                                ? "https://irowiki.org/w/images/1/13/Special_Pharmacy.png"
+                                : "https://irowiki.org/w/images/5/53/Prepare_Potion.png"
+                            }
+                            alt={
+                              skillUsed === "special_pharmacy"
+                                ? "Special Pharmacy"
+                                : "Potion Creation"
+                            }
+                            style={{ width: "20px", height: "20px" }}
+                          />
+                          <span>{value}</span>
+                        </div>
+                      )}
                     />
                   </Col>
-                  <Col span={8}>
+                </Row>
+                <Row gutter={16} style={{ marginTop: "16px" }}>
+                  <Col span={12}>
                     <Statistic
                       title="Average Creation Value"
                       value={avgCreation}
                       precision={2}
                     />
                   </Col>
-                  <Col span={8}>
+                  <Col span={12}>
                     <Statistic
                       title="Average Items Created"
                       value={avgPotions}
@@ -768,57 +957,78 @@ function App() {
                 </Space>
               </Card>
 
-              <Card title="Formula Information" size="small">
-                {skillUsed === "special_pharmacy" ? (
-                  <>
-                    <Text>
-                      <strong>Special Pharmacy - Creation Formula:</strong>
-                      <br />
-                      INT + (DEX ÷ 2) + LUK + Job_Lv + Random[30, 150] +
-                      (Base_Lv − 100) + (Potion_Research_Lv × 5) +
-                      (Full_Chemical_Protection_Lv × Random[4, 10])
-                    </Text>
-                    <br />
-                    <br />
-                    <Text>
-                      <strong>Difficulty Formula:</strong>
-                      <br />
-                      Specific_Value + Item_Rate
-                    </Text>
-                    <br />
-                    <br />
-                    <Text>
-                      <strong>Success Conditions:</strong>
-                      <br />• Creation {">"}= Difficulty + 400: Maximum potions
-                      <br />• Creation {">"}= Difficulty + 300: Max - 3 potions
-                      <br />• Creation {">"}= Difficulty + 100: Max - 4 potions
-                      <br />• Creation {">"}= Difficulty + 1: Max - 5 potions
-                      <br />• Creation {"<"} Difficulty: Max - 6 potions
-                    </Text>
-                  </>
-                ) : (
-                  <>
-                    <Text>
-                      <strong>Potion Creation - Brewing Rate Formula:</strong>
-                      <br />
-                      (PreparePotion_Lv × 3) + (PotionResearch_Lv) +
-                      (InstructionChange_Lv) + (JobLv × 0.2) + (DEX × 0.1) +
-                      (LUK × 0.1) + (INT × 0.05) + Potion_Rate
-                    </Text>
-                    <br />
-                    <br />
-                    <Text>
-                      <strong>Success Condition:</strong>
-                      <br />
-                      Random[0, 100] {"<"} Brewing Rate = Success (1 item
-                      created)
-                      <br />
-                      Random[0, 100] {">"}= Brewing Rate = Failure (0 items
-                      created)
-                    </Text>
-                  </>
-                )}
-              </Card>
+              <Collapse
+                size="small"
+                activeKey={isFormulaCollapsed ? [] : ["formula"]}
+                onChange={(keys) => {
+                  const isOpen = keys.includes("formula");
+                  setIsFormulaCollapsed(!isOpen);
+                }}
+                items={[
+                  {
+                    key: "formula",
+                    label: "Formula Information",
+                    children:
+                      skillUsed === "special_pharmacy" ? (
+                        <>
+                          <Text>
+                            <strong>
+                              Special Pharmacy - Creation Formula:
+                            </strong>
+                            <br />
+                            INT + (DEX ÷ 2) + LUK + Job_Lv + Random[30, 150] +
+                            (Base_Lv − 100) + (Potion_Research_Lv × 5) +
+                            (Full_Chemical_Protection_Lv × Random[4, 10])
+                          </Text>
+                          <br />
+                          <br />
+                          <Text>
+                            <strong>Difficulty Formula:</strong>
+                            <br />
+                            Specific_Value + Item_Rate
+                          </Text>
+                          <br />
+                          <br />
+                          <Text>
+                            <strong>Success Conditions:</strong>
+                            <br />• Creation {">"}= Difficulty + 400: Maximum
+                            potions
+                            <br />• Creation {">"}= Difficulty + 300: Max - 3
+                            potions
+                            <br />• Creation {">"}= Difficulty + 100: Max - 4
+                            potions
+                            <br />• Creation {">"}= Difficulty + 1: Max - 5
+                            potions
+                            <br />• Creation {"<"} Difficulty: Max - 6 potions
+                          </Text>
+                        </>
+                      ) : (
+                        <>
+                          <Text>
+                            <strong>
+                              Potion Creation - Brewing Rate Formula:
+                            </strong>
+                            <br />
+                            (PreparePotion_Lv × 3) + (PotionResearch_Lv) +
+                            (InstructionChange_Lv) + (JobLv × 0.2) + (DEX × 0.1)
+                            + (LUK × 0.1) + (INT × 0.05) + Potion_Rate
+                          </Text>
+                          <br />
+                          <br />
+                          <Text>
+                            <strong>Success Condition:</strong>
+                            <br />
+                            Random[0, 100] {"<"} Brewing Rate = Success (1 item
+                            created)
+                            <br />
+                            Random[0, 100] {">"}= Brewing Rate = Failure (0
+                            items created)
+                          </Text>
+                        </>
+                      ),
+                  },
+                ]}
+              />
             </Space>
           )}
 
