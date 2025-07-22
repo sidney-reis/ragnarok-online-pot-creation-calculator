@@ -15,6 +15,8 @@ import {
   Select,
   Collapse,
 } from "antd";
+import { useTranslation } from "react-i18next";
+import i18n from "./i18n";
 import "./App.css";
 
 const { Title, Text } = Typography;
@@ -1352,6 +1354,7 @@ interface SimulationResult {
 const STORAGE_KEY = "ragnarok-potion-simulator";
 
 function App() {
+  const { t } = useTranslation();
   const [form] = Form.useForm();
   const [results, setResults] = useState<SimulationResult[]>([]);
   const [isCalculating, setIsCalculating] = useState(false);
@@ -1640,30 +1643,58 @@ function App() {
 
   const filteredItems = getFilteredItems();
 
+  const handleLanguageChange = (language: string) => {
+    i18n.changeLanguage(language);
+  };
+
   return (
     <div style={{ padding: "24px", maxWidth: "1400px", margin: "0 auto" }}>
-      <Title level={1} style={{ textAlign: "center", marginBottom: "32px" }}>
-        Ragnarok Online Potion Creation Simulator
-      </Title>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "32px",
+        }}
+      >
+        <div style={{ flex: 1 }} />
+        <Title level={1} style={{ textAlign: "center", margin: 0, flex: 1 }}>
+          {t("app.title")}
+        </Title>
+        <div style={{ flex: 1, display: "flex", justifyContent: "flex-end" }}>
+          <Space>
+            <Text>{t("app.language")}:</Text>
+            <Select
+              value={i18n.language}
+              onChange={handleLanguageChange}
+              style={{ width: 120 }}
+              options={[
+                { value: "en", label: t("app.english") },
+                { value: "pt", label: t("app.portuguese") },
+              ]}
+            />
+          </Space>
+        </div>
+      </div>
 
       <Row gutter={[24, 24]}>
         <Col xs={24} lg={8}>
-          <Card title="Select Item to Create" size="small">
+          <Card title={t("itemSelection.title")} size="small">
             <Space direction="vertical" style={{ width: "100%" }} size="small">
               <Input
-                placeholder="Search items..."
+                placeholder={t("itemSelection.searchPlaceholder")}
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
                 allowClear
               />
               <Select
                 style={{ width: "100%" }}
-                placeholder="Filter by skill"
+                placeholder={t("itemSelection.filterPlaceholder")}
                 value={skillFilter}
                 onChange={setSkillFilter}
                 optionRender={(option) => {
                   if (option.value === "all") {
-                    return <span>All Skills</span>;
+                    return <span>{t("itemSelection.allSkills")}</span>;
                   }
                   let iconUrl = "";
                   let skillName = "";
@@ -1671,15 +1702,15 @@ function App() {
                   if (option.value === "special_pharmacy") {
                     iconUrl =
                       "https://irowiki.org/w/images/1/13/Special_Pharmacy.png";
-                    skillName = "Special Pharmacy";
+                    skillName = t("itemSelection.specialPharmacy");
                   } else if (option.value === "potion_creation") {
                     iconUrl =
                       "https://irowiki.org/w/images/5/53/Prepare_Potion.png";
-                    skillName = "Potion Creation";
+                    skillName = t("itemSelection.potionCreation");
                   } else if (option.value === "mixed_cooking") {
                     iconUrl =
                       "https://irowiki.org/w/images/3/35/Mixed_Cooking.png";
-                    skillName = "Mixed Cooking";
+                    skillName = t("itemSelection.mixedCooking");
                   }
 
                   return (
@@ -1700,10 +1731,19 @@ function App() {
                   );
                 }}
                 options={[
-                  { value: "all", label: "All Skills" },
-                  { value: "special_pharmacy", label: "Special Pharmacy" },
-                  { value: "potion_creation", label: "Potion Creation" },
-                  { value: "mixed_cooking", label: "Mixed Cooking" },
+                  { value: "all", label: t("itemSelection.allSkills") },
+                  {
+                    value: "special_pharmacy",
+                    label: t("itemSelection.specialPharmacy"),
+                  },
+                  {
+                    value: "potion_creation",
+                    label: t("itemSelection.potionCreation"),
+                  },
+                  {
+                    value: "mixed_cooking",
+                    label: t("itemSelection.mixedCooking"),
+                  },
                 ]}
               />
             </Space>
@@ -1724,7 +1764,7 @@ function App() {
                       color: "#999",
                     }}
                   >
-                    No items found matching your search criteria
+                    {t("itemSelection.noItemsFound")}
                   </div>
                 ) : (
                   filteredItems.map(([key, value]) => {
@@ -1792,12 +1832,12 @@ function App() {
 
         <Col xs={24} lg={8}>
           <Card
-            title={`Character Stats & Skills - ${
+            title={`${t("characterStats.title")} - ${
               selectedItemData.skill === "special_pharmacy"
-                ? "Special Pharmacy"
+                ? t("itemSelection.specialPharmacy")
                 : selectedItemData.skill === "potion_creation"
-                ? "Potion Creation"
-                : "Mixed Cooking"
+                ? t("itemSelection.potionCreation")
+                : t("itemSelection.mixedCooking")
             }`}
             size="small"
           >
@@ -1838,18 +1878,22 @@ function App() {
               <Row gutter={16}>
                 <Col span={12}>
                   <Form.Item
-                    label="INT"
+                    label={t("characterStats.int")}
                     name="int"
-                    rules={[{ required: true, message: "Please input INT!" }]}
+                    rules={[
+                      { required: true, message: t("validation.intRequired") },
+                    ]}
                   >
                     <InputNumber min={1} max={999} style={{ width: "100%" }} />
                   </Form.Item>
                 </Col>
                 <Col span={12}>
                   <Form.Item
-                    label="DEX"
+                    label={t("characterStats.dex")}
                     name="dex"
-                    rules={[{ required: true, message: "Please input DEX!" }]}
+                    rules={[
+                      { required: true, message: t("validation.dexRequired") },
+                    ]}
                   >
                     <InputNumber min={1} max={999} style={{ width: "100%" }} />
                   </Form.Item>
@@ -1859,19 +1903,24 @@ function App() {
               <Row gutter={16}>
                 <Col span={12}>
                   <Form.Item
-                    label="LUK"
+                    label={t("characterStats.luk")}
                     name="luk"
-                    rules={[{ required: true, message: "Please input LUK!" }]}
+                    rules={[
+                      { required: true, message: t("validation.lukRequired") },
+                    ]}
                   >
                     <InputNumber min={1} max={999} style={{ width: "100%" }} />
                   </Form.Item>
                 </Col>
                 <Col span={12}>
                   <Form.Item
-                    label="Job Level"
+                    label={t("characterStats.jobLevel")}
                     name="jobLevel"
                     rules={[
-                      { required: true, message: "Please input Job Level!" },
+                      {
+                        required: true,
+                        message: t("validation.jobLevelRequired"),
+                      },
                     ]}
                   >
                     <InputNumber min={1} max={70} style={{ width: "100%" }} />
@@ -1880,24 +1929,27 @@ function App() {
               </Row>
 
               <Form.Item
-                label="Base Level"
+                label={t("characterStats.baseLevel")}
                 name="baseLevel"
                 rules={[
-                  { required: true, message: "Please input Base Level!" },
+                  {
+                    required: true,
+                    message: t("validation.baseLevelRequired"),
+                  },
                 ]}
               >
                 <InputNumber min={1} max={999} style={{ width: "100%" }} />
               </Form.Item>
 
-              <Divider>Skills</Divider>
+              <Divider>{t("characterStats.skills")}</Divider>
 
               <Form.Item
-                label="Potion Research Level"
+                label={t("characterStats.potionResearchLevel")}
                 name="potionResearchLevel"
                 rules={[
                   {
                     required: true,
-                    message: "Please input Potion Research Level!",
+                    message: t("validation.potionResearchRequired"),
                   },
                 ]}
               >
@@ -1907,22 +1959,22 @@ function App() {
               {selectedItemData.skill === "special_pharmacy" && (
                 <>
                   <Form.Item
-                    label="Full Chemical Protection Level"
+                    label={t("characterStats.fullChemicalProtectionLevel")}
                     name="fullChemicalProtectionLevel"
                     rules={[
-                      { required: true, message: "Please input FCP Level!" },
+                      { required: true, message: t("validation.fcpRequired") },
                     ]}
                   >
                     <InputNumber min={0} max={5} style={{ width: "100%" }} />
                   </Form.Item>
 
                   <Form.Item
-                    label="Special Pharmacy Level"
+                    label={t("characterStats.specialPharmacyLevel")}
                     name="specialPharmacyLevel"
                     rules={[
                       {
                         required: true,
-                        message: "Please input Special Pharmacy Level!",
+                        message: t("validation.specialPharmacyRequired"),
                       },
                     ]}
                   >
@@ -1934,12 +1986,12 @@ function App() {
               {selectedItemData.skill === "potion_creation" && (
                 <>
                   <Form.Item
-                    label="Prepare Potion Level"
+                    label={t("characterStats.preparePotionLevel")}
                     name="preparePotionLevel"
                     rules={[
                       {
                         required: true,
-                        message: "Please input Prepare Potion Level!",
+                        message: t("validation.preparePotionRequired"),
                       },
                     ]}
                   >
@@ -1947,12 +1999,12 @@ function App() {
                   </Form.Item>
 
                   <Form.Item
-                    label="Instruction Change Level"
+                    label={t("characterStats.instructionChangeLevel")}
                     name="instructionChangeLevel"
                     rules={[
                       {
                         required: true,
-                        message: "Please input Instruction Change Level!",
+                        message: t("validation.instructionChangeRequired"),
                       },
                     ]}
                   >
@@ -1969,7 +2021,7 @@ function App() {
                   size="large"
                   style={{ width: "100%" }}
                 >
-                  Calculate Creation Odds
+                  {t("characterStats.calculateButton")}
                 </Button>
               </Form.Item>
             </Form>
@@ -1979,17 +2031,17 @@ function App() {
         <Col xs={24} lg={8}>
           {results.length > 0 && (
             <Space direction="vertical" style={{ width: "100%" }} size="large">
-              <Card title="Simulation Results" size="small">
+              <Card title={t("simulationResults.title")} size="small">
                 <Row gutter={16}>
                   <Col span={24}>
                     <Statistic
-                      title="Skill Used"
+                      title={t("simulationResults.skillUsed")}
                       value={
                         skillUsed === "special_pharmacy"
-                          ? "Special Pharmacy"
+                          ? t("itemSelection.specialPharmacy")
                           : skillUsed === "potion_creation"
-                          ? "Potion Creation"
-                          : "Mixed Cooking"
+                          ? t("itemSelection.potionCreation")
+                          : t("itemSelection.mixedCooking")
                       }
                       formatter={(value) => (
                         <div
@@ -2010,10 +2062,10 @@ function App() {
                             }
                             alt={
                               skillUsed === "special_pharmacy"
-                                ? "Special Pharmacy"
+                                ? t("itemSelection.specialPharmacy")
                                 : skillUsed === "potion_creation"
-                                ? "Potion Creation"
-                                : "Mixed Cooking"
+                                ? t("itemSelection.potionCreation")
+                                : t("itemSelection.mixedCooking")
                             }
                             style={{ width: "20px", height: "20px" }}
                           />
@@ -2026,14 +2078,14 @@ function App() {
                 <Row gutter={16} style={{ marginTop: "16px" }}>
                   <Col span={12}>
                     <Statistic
-                      title="Average Creation Value"
+                      title={t("simulationResults.averageCreationValue")}
                       value={avgCreation}
                       precision={2}
                     />
                   </Col>
                   <Col span={12}>
                     <Statistic
-                      title="Average Items Created"
+                      title={t("simulationResults.averageItemsCreated")}
                       value={avgPotions}
                       precision={2}
                     />
@@ -2041,13 +2093,22 @@ function App() {
                 </Row>
               </Card>
 
-              <Card title="Potion Creation Probability" size="small">
+              <Card
+                title={t("simulationResults.probabilityTitle")}
+                size="small"
+              >
                 <Space direction="vertical" style={{ width: "100%" }}>
                   {statistics.map((stat) => (
                     <Alert
                       key={stat.potions}
-                      message={`${stat.potions} Potions: ${stat.percentage}%`}
-                      description={`${stat.count} out of ${results.length} simulations`}
+                      message={`${stat.potions} ${t(
+                        "simulationResults.potions"
+                      )}: ${stat.percentage}%`}
+                      description={`${stat.count} ${t(
+                        "simulationResults.outOf"
+                      )} ${results.length} ${t(
+                        "simulationResults.simulations"
+                      )}`}
                       type={
                         stat.potions >= 8
                           ? "success"
@@ -2071,89 +2132,112 @@ function App() {
                 items={[
                   {
                     key: "formula",
-                    label: "Formula Information",
+                    label: t("formulaInfo.title"),
                     children:
                       skillUsed === "special_pharmacy" ? (
                         <>
                           <Text>
                             <strong>
-                              Special Pharmacy - Creation Formula:
+                              {t("formulaInfo.specialPharmacy.creationFormula")}
                             </strong>
                             <br />
-                            INT + (DEX ÷ 2) + LUK + Job_Lv + Random[30, 150] +
-                            (Base_Lv − 100) + (Potion_Research_Lv × 5) +
-                            (Full_Chemical_Protection_Lv × Random[4, 10])
+                            {t(
+                              "formulaInfo.specialPharmacy.creationFormulaText"
+                            )}
                           </Text>
                           <br />
                           <br />
                           <Text>
-                            <strong>Difficulty Formula:</strong>
+                            <strong>
+                              {t(
+                                "formulaInfo.specialPharmacy.difficultyFormula"
+                              )}
+                            </strong>
                             <br />
-                            Specific_Value + Item_Rate
+                            {t(
+                              "formulaInfo.specialPharmacy.difficultyFormulaText"
+                            )}
                           </Text>
                           <br />
                           <br />
                           <Text>
-                            <strong>Success Conditions:</strong>
-                            <br />• Creation {">"}= Difficulty + 400: Maximum
-                            potions
-                            <br />• Creation {">"}= Difficulty + 300: Max - 3
-                            potions
-                            <br />• Creation {">"}= Difficulty + 100: Max - 4
-                            potions
-                            <br />• Creation {">"}= Difficulty + 1: Max - 5
-                            potions
-                            <br />• Creation {"<"} Difficulty: Max - 6 potions
+                            <strong>
+                              {t(
+                                "formulaInfo.specialPharmacy.successConditions"
+                              )}
+                            </strong>
+                            <br />•{" "}
+                            {t("formulaInfo.specialPharmacy.condition1")}
+                            <br />•{" "}
+                            {t("formulaInfo.specialPharmacy.condition2")}
+                            <br />•{" "}
+                            {t("formulaInfo.specialPharmacy.condition3")}
+                            <br />•{" "}
+                            {t("formulaInfo.specialPharmacy.condition4")}
+                            <br />•{" "}
+                            {t("formulaInfo.specialPharmacy.condition5")}
                           </Text>
                         </>
                       ) : skillUsed === "potion_creation" ? (
                         <>
                           <Text>
                             <strong>
-                              Potion Creation - Brewing Rate Formula:
+                              {t(
+                                "formulaInfo.potionCreation.brewingRateFormula"
+                              )}
                             </strong>
                             <br />
-                            (PreparePotion_Lv × 3) + (PotionResearch_Lv) +
-                            (InstructionChange_Lv) + (JobLv × 0.2) + (DEX × 0.1)
-                            + (LUK × 0.1) + (INT × 0.05) + Potion_Rate
+                            {t(
+                              "formulaInfo.potionCreation.brewingRateFormulaText"
+                            )}
                           </Text>
                           <br />
                           <br />
                           <Text>
-                            <strong>Success Condition:</strong>
+                            <strong>
+                              {t("formulaInfo.potionCreation.successCondition")}
+                            </strong>
                             <br />
-                            Random[0, 100] {"<"} Brewing Rate = Success (1 item
-                            created)
+                            {t(
+                              "formulaInfo.potionCreation.successConditionText1"
+                            )}
                             <br />
-                            Random[0, 100] {">"}= Brewing Rate = Failure (0
-                            items created)
+                            {t(
+                              "formulaInfo.potionCreation.successConditionText2"
+                            )}
                           </Text>
                         </>
                       ) : (
                         <>
                           <Text>
-                            <strong>Mixed Cooking - Creation Formula:</strong>
+                            <strong>
+                              {t("formulaInfo.mixedCooking.creationFormula")}
+                            </strong>
                             <br />
-                            (Job_Lv ÷ 4) + (DEX ÷ 3) + (LUK ÷ 2)
+                            {t("formulaInfo.mixedCooking.creationFormulaText")}
                           </Text>
                           <br />
                           <br />
                           <Text>
-                            <strong>Difficulty Formula:</strong>
+                            <strong>
+                              {t("formulaInfo.mixedCooking.difficultyFormula")}
+                            </strong>
                             <br />
-                            Random[30, 150] + Item_Rate
+                            {t(
+                              "formulaInfo.mixedCooking.difficultyFormulaText"
+                            )}
                           </Text>
                           <br />
                           <br />
                           <Text>
-                            <strong>Success Conditions (Level 2):</strong>
-                            <br />• Creation {">"}= Difficulty + 30: 10~12
-                            dishes
-                            <br />• Creation {">"}= Difficulty + 10: 10 dishes
-                            <br />• Creation = Difficulty - 10: 8 dishes
-                            <br />• Creation {"<"}= Difficulty - 30: 5 dishes
-                            <br />• Creation {"<"}= Difficulty - 50: Cooking
-                            fails (0 dishes)
+                            <strong>
+                              {t("formulaInfo.mixedCooking.successConditions")}
+                            </strong>
+                            <br />• {t("formulaInfo.mixedCooking.condition1")}
+                            <br />• {t("formulaInfo.mixedCooking.condition2")}
+                            <br />• {t("formulaInfo.mixedCooking.condition3")}
+                            <br />• {t("formulaInfo.mixedCooking.condition4")}
+                            <br />• {t("formulaInfo.mixedCooking.condition5")}
                           </Text>
                         </>
                       ),
@@ -2166,10 +2250,7 @@ function App() {
           {results.length === 0 && (
             <Card>
               <div style={{ textAlign: "center", padding: "48px 0" }}>
-                <Text type="secondary">
-                  Fill in your character stats and click "Calculate Potion
-                  Creation Odds" to see the simulation results.
-                </Text>
+                <Text type="secondary">{t("simulationResults.noResults")}</Text>
               </div>
             </Card>
           )}
@@ -2177,7 +2258,7 @@ function App() {
           {/* Materials and Requirements Section */}
           {selectedItemData.materials &&
             selectedItemData.materials.length > 0 && (
-              <Card title="Required Materials & Books" size="small">
+              <Card title={t("materialsSection.title")} size="small">
                 <Space
                   direction="vertical"
                   style={{ width: "100%" }}
@@ -2185,7 +2266,7 @@ function App() {
                 >
                   {selectedItemData.book && (
                     <div>
-                      <Text strong>Required Book:</Text>
+                      <Text strong>{t("materialsSection.requiredBook")}</Text>
                       <div
                         style={{
                           marginTop: "8px",
@@ -2200,7 +2281,7 @@ function App() {
                   )}
 
                   <div>
-                    <Text strong>Materials Needed:</Text>
+                    <Text strong>{t("materialsSection.materialsNeeded")}</Text>
                     <div style={{ marginTop: "8px" }}>
                       <Space
                         direction="vertical"
