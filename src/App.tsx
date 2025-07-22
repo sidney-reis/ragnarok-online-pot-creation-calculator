@@ -1364,14 +1364,23 @@ function App() {
   const [searchText, setSearchText] = useState<string>("");
   const [skillFilter, setSkillFilter] = useState<string>("all");
   const [isFormulaCollapsed, setIsFormulaCollapsed] = useState<boolean>(true);
+  const [isInitialized, setIsInitialized] = useState<boolean>(false);
 
   // Load saved data from localStorage
   const loadSavedData = () => {
     try {
+      console.log(
+        "Attempting to load data from localStorage with key:",
+        STORAGE_KEY
+      );
       const savedData = localStorage.getItem(STORAGE_KEY);
+      console.log("Raw data from localStorage:", savedData);
       if (savedData) {
         const parsedData = JSON.parse(savedData);
+        console.log("Parsed data from localStorage:", parsedData);
         return parsedData;
+      } else {
+        console.log("No data found in localStorage");
       }
     } catch (error) {
       console.error("Error loading saved data:", error);
@@ -1386,43 +1395,106 @@ function App() {
     isFormulaCollapsed: boolean;
   }) => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      console.log("Attempting to save data:", data);
+      const jsonString = JSON.stringify(data);
+      console.log("JSON string to save:", jsonString);
+      localStorage.setItem(STORAGE_KEY, jsonString);
+      console.log(
+        "Data saved successfully to localStorage with key:",
+        STORAGE_KEY
+      );
+
+      // Verify the save by immediately reading it back
+      const verification = localStorage.getItem(STORAGE_KEY);
+      console.log(
+        "Verification - data read back from localStorage:",
+        verification
+      );
     } catch (error) {
       console.error("Error saving data:", error);
+      console.error("Data that failed to save:", data);
     }
   };
 
   // Initialize form with saved data
   useEffect(() => {
-    const savedData = loadSavedData();
-    if (savedData) {
-      // Set selected item type
-      if (savedData.selectedItemType) {
-        setSelectedItemType(savedData.selectedItemType);
+    const initializeApp = async () => {
+      const savedData = loadSavedData();
+
+      const defaultFormValues = {
+        int: 99,
+        dex: 99,
+        luk: 99,
+        jobLevel: 50,
+        baseLevel: 99,
+        potionResearchLevel: 10,
+        fullChemicalProtectionLevel: 5,
+        specialPharmacyLevel: 10,
+        preparePotionLevel: 10,
+        instructionChangeLevel: 5,
+        itemType: "enriched_white_potionz",
+      };
+
+      if (savedData && savedData.selectedItemType) {
+        console.log("Loading saved data:", savedData);
+
+        // Set selected item type first
+        const savedItemType = savedData.selectedItemType;
+        setSelectedItemType(savedItemType);
+
+        // Set form values including the saved itemType
+        const formValues = {
+          ...defaultFormValues,
+          itemType: savedItemType,
+          ...savedData.formValues, // Override with saved values
+        };
+
+        // Use a small delay to ensure state is updated
+        setTimeout(() => {
+          form.setFieldsValue(formValues);
+        }, 50);
+
+        // Set formula collapse preference
+        if (typeof savedData.isFormulaCollapsed === "boolean") {
+          setIsFormulaCollapsed(savedData.isFormulaCollapsed);
+        }
+      } else {
+        console.log("No saved data found, using defaults");
+        // No saved data at all, set default values
+        form.setFieldsValue(defaultFormValues);
       }
 
-      // Set form values
-      if (savedData.formValues) {
-        form.setFieldsValue(savedData.formValues);
-      }
+      setIsInitialized(true);
+    };
 
-      // Set formula collapse preference
-      if (typeof savedData.isFormulaCollapsed === "boolean") {
-        setIsFormulaCollapsed(savedData.isFormulaCollapsed);
-      }
-    }
+    initializeApp();
   }, [form]);
 
-  // Save data whenever form values or selected item changes
+  // Save data whenever form values or selected item changes (only after initialization)
   useEffect(() => {
+    if (!isInitialized) return;
+
     const formValues = form.getFieldsValue();
+    const cleanFormValues = {
+      int: formValues.int,
+      dex: formValues.dex,
+      luk: formValues.luk,
+      jobLevel: formValues.jobLevel,
+      baseLevel: formValues.baseLevel,
+      potionResearchLevel: formValues.potionResearchLevel,
+      fullChemicalProtectionLevel: formValues.fullChemicalProtectionLevel,
+      specialPharmacyLevel: formValues.specialPharmacyLevel,
+      preparePotionLevel: formValues.preparePotionLevel,
+      instructionChangeLevel: formValues.instructionChangeLevel,
+      itemType: formValues.itemType,
+    };
     const dataToSave = {
       selectedItemType,
-      formValues,
+      formValues: cleanFormValues,
       isFormulaCollapsed,
     };
     saveData(dataToSave);
-  }, [selectedItemType, isFormulaCollapsed, form]);
+  }, [selectedItemType, isFormulaCollapsed, isInitialized]);
 
   const getRandomInRange = (min: number, max: number): number => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -1619,11 +1691,39 @@ function App() {
       : 0;
 
   const skillUsed = results.length > 0 ? results[0].skill : null;
-  const selectedItemData = itemTypes[selectedItemType];
+  const selectedItemData =
+    selectedItemType && itemTypes[selectedItemType]
+      ? itemTypes[selectedItemType]
+      : itemTypes["enriched_white_potionz"];
 
   const handleItemSelect = (itemKey: string) => {
     setSelectedItemType(itemKey);
     form.setFieldValue("itemType", itemKey);
+
+    // Immediately save to localStorage when item is selected
+    if (isInitialized) {
+      const formValues = form.getFieldsValue();
+      const cleanFormValues = {
+        int: formValues.int,
+        dex: formValues.dex,
+        luk: formValues.luk,
+        jobLevel: formValues.jobLevel,
+        baseLevel: formValues.baseLevel,
+        potionResearchLevel: formValues.potionResearchLevel,
+        fullChemicalProtectionLevel: formValues.fullChemicalProtectionLevel,
+        specialPharmacyLevel: formValues.specialPharmacyLevel,
+        preparePotionLevel: formValues.preparePotionLevel,
+        instructionChangeLevel: formValues.instructionChangeLevel,
+        itemType: itemKey,
+      };
+      const dataToSave = {
+        selectedItemType: itemKey,
+        formValues: cleanFormValues,
+        isFormulaCollapsed,
+      };
+      console.log("Saving data:", dataToSave);
+      saveData(dataToSave);
+    }
   };
 
   // Filter items based on search text and skill filter
@@ -1865,28 +1965,31 @@ function App() {
               onFinish={onFinish}
               onValuesChange={() => {
                 // Save form data whenever any field changes
-                setTimeout(() => {
-                  const formValues = form.getFieldsValue();
-                  const dataToSave = {
-                    selectedItemType,
-                    formValues,
-                    isFormulaCollapsed,
-                  };
-                  saveData(dataToSave);
-                }, 100);
-              }}
-              initialValues={{
-                int: 99,
-                dex: 99,
-                luk: 99,
-                jobLevel: 50,
-                baseLevel: 99,
-                potionResearchLevel: 10,
-                fullChemicalProtectionLevel: 5,
-                specialPharmacyLevel: 10,
-                preparePotionLevel: 10,
-                instructionChangeLevel: 5,
-                itemType: selectedItemType,
+                if (isInitialized) {
+                  setTimeout(() => {
+                    const formValues = form.getFieldsValue();
+                    const cleanFormValues = {
+                      int: formValues.int,
+                      dex: formValues.dex,
+                      luk: formValues.luk,
+                      jobLevel: formValues.jobLevel,
+                      baseLevel: formValues.baseLevel,
+                      potionResearchLevel: formValues.potionResearchLevel,
+                      fullChemicalProtectionLevel:
+                        formValues.fullChemicalProtectionLevel,
+                      specialPharmacyLevel: formValues.specialPharmacyLevel,
+                      preparePotionLevel: formValues.preparePotionLevel,
+                      instructionChangeLevel: formValues.instructionChangeLevel,
+                      itemType: formValues.itemType,
+                    };
+                    const dataToSave = {
+                      selectedItemType,
+                      formValues: cleanFormValues,
+                      isFormulaCollapsed,
+                    };
+                    saveData(dataToSave);
+                  }, 100);
+                }
               }}
             >
               <Form.Item name="itemType" style={{ display: "none" }}>
