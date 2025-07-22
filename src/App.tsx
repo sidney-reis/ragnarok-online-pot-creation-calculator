@@ -1431,6 +1431,8 @@ function App() {
         itemType: "enriched_white_potionz",
       };
 
+      let finalFormValues = defaultFormValues;
+
       if (savedData && savedData.selectedItemType) {
         console.log("Loading saved data:", savedData);
 
@@ -1439,16 +1441,11 @@ function App() {
         setSelectedItemType(savedItemType);
 
         // Set form values including the saved itemType
-        const formValues = {
+        finalFormValues = {
           ...defaultFormValues,
           itemType: savedItemType,
           ...savedData.formValues, // Override with saved values
         };
-
-        // Use a small delay to ensure state is updated
-        setTimeout(() => {
-          form.setFieldsValue(formValues);
-        }, 50);
 
         // Set formula collapse preference
         if (typeof savedData.isFormulaCollapsed === "boolean") {
@@ -1456,11 +1453,17 @@ function App() {
         }
       } else {
         console.log("No saved data found, using defaults");
-        // No saved data at all, set default values
-        form.setFieldsValue(defaultFormValues);
       }
 
-      setIsInitialized(true);
+      // Set form values
+      form.setFieldsValue(finalFormValues);
+
+      // Auto-calculate results after initialization
+      setTimeout(() => {
+        const preciseResults = calculatePreciseResults(finalFormValues);
+        setResults(preciseResults);
+        setIsInitialized(true);
+      }, 100);
     };
 
     initializeApp();
@@ -2439,7 +2442,23 @@ function App() {
                   })}
                 </Space>
               </Card>
+            </Space>
+          )}
 
+          {results.length === 0 && (
+            <Card>
+              <div style={{ textAlign: "center", padding: "48px 0" }}>
+                <Text type="secondary">
+                  {t("calculationResults.noResults")}
+                </Text>
+              </div>
+            </Card>
+          )}
+        </Col>
+
+        <Col xs={24} lg={8}>
+          {results.length > 0 && (
+            <Space direction="vertical" style={{ width: "100%" }} size="large">
               <Card title={t("formulaInfo.title")} size="small">
                 {skillUsed === "special_pharmacy" ? (
                   <>
@@ -2526,7 +2545,6 @@ function App() {
                   </>
                 )}
               </Card>
-
               {/* Materials and Requirements Section */}
               {selectedItemData.materials &&
                 selectedItemData.materials.length > 0 && (
