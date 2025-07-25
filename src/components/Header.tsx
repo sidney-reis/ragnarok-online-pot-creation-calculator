@@ -5,8 +5,9 @@ const { Title, Text } = Typography;
 
 import i18n from "../i18n";
 import { HEADER_HEIGHT, LANGUAGE_STORAGE_KEY } from "../constants";
+import type { FC } from "react";
 
-const Header = () => {
+const Header: FC<{ isSmallWindow: boolean }> = ({ isSmallWindow }) => {
   const { t } = useTranslation();
 
   const handleLanguageChange = (language: string) => {
@@ -20,7 +21,10 @@ const Header = () => {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        height: HEADER_HEIGHT,
+        height: isSmallWindow ? undefined : HEADER_HEIGHT,
+        padding: isSmallWindow ? "12px 0" : undefined,
+        flexDirection: isSmallWindow ? "column" : "row",
+        gap: 6,
       }}
     >
       <Title
@@ -36,13 +40,14 @@ const Header = () => {
         style={{
           display: "flex",
           alignSelf: "flex-start",
-          justifyContent: "flex-end",
-          height: "100%",
+          justifyContent: isSmallWindow ? "center" : "flex-end",
+          height: isSmallWindow ? undefined : "100%",
+          width: isSmallWindow ? "100%" : undefined,
           alignItems: "center",
           gap: 12,
         }}
       >
-        <Text>{t("app.language")}:</Text>
+        {!isSmallWindow && <Text>{t("app.language")}:</Text>}
         <Select
           value={i18n.language}
           onChange={handleLanguageChange}

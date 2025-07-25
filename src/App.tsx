@@ -36,7 +36,7 @@ const App = () => {
 
   return (
     <div style={{ padding: "0px 16px" }}>
-      <Header />
+      <Header isSmallWindow={isSmallWindow} />
       <div
         style={{
           height: `calc(100vh - ${HEADER_HEIGHT}px)`,
@@ -86,27 +86,29 @@ const App = () => {
           </div>
         </div>
 
-        {results.length > 0 ? (
-          <div style={{ height: "100%", flex: "1 1 0" }}>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(450px, 1fr))",
-                gap: 24,
-                overflow: "auto",
-                maxHeight: "100%",
-                width: "100%",
-              }}
-            >
-              <CalculationResults results={results} />
-              <Probability results={results} />
-              <FormulaResult skill={skillUsed} />
-              <Materials selectedItem={selectedItem} />
-            </div>
+        <div style={{ height: "100%", flex: "1 1 0" }}>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(450px, 1fr))",
+              gap: 24,
+              overflow: "auto",
+              maxHeight: "100%",
+              width: "100%",
+            }}
+          >
+            {results.length > 0 ? (
+              <>
+                <CalculationResults results={results} />
+                <Probability results={results} />
+                <FormulaResult skill={skillUsed} />
+                <Materials selectedItem={selectedItem} />
+              </>
+            ) : (
+              <NoResults />
+            )}
           </div>
-        ) : (
-          <NoResults />
-        )}
+        </div>
       </div>
     </div>
   );
