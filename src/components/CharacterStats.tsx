@@ -7,7 +7,8 @@ import { FORM_STORAGE_KEY } from "../constants";
 const CharacterStats: FC<{
   form: FormInstance<FormValues>;
   onChange: (values: FormValues) => void;
-}> = ({ form, onChange }) => {
+  isVerySmallWindow: boolean;
+}> = ({ form, onChange, isVerySmallWindow }) => {
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -50,7 +51,7 @@ const CharacterStats: FC<{
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(5, 1fr)",
+            gridTemplateColumns: `repeat(${isVerySmallWindow ? 2 : 5}, 1fr)`,
             gap: "5px 10px",
           }}
         >

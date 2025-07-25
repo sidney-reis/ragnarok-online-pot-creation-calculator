@@ -11,7 +11,11 @@ import Materials from "./components/Materials";
 import CalculationResults from "./components/CalculationResults";
 import Probability from "./components/Probability";
 import Header from "./components/Header";
-import { HEADER_HEIGHT, SMALL_WINDOW_WIDTH } from "./constants";
+import {
+  HEADER_HEIGHT,
+  SMALL_WINDOW_WIDTH,
+  VERY_SMALL_WINDOW_WIDTH,
+} from "./constants";
 
 const App = () => {
   const [form] = Form.useForm<FormValues>();
@@ -23,6 +27,9 @@ const App = () => {
   const [isSmallWindow, setIsSmallWindow] = useState(
     window.innerWidth < SMALL_WINDOW_WIDTH
   );
+  const [isVerySmallWindow, setIsVerySmallWindow] = useState(
+    window.innerWidth < VERY_SMALL_WINDOW_WIDTH
+  );
 
   useEffect(() => {
     const mediaQuery = window.matchMedia(
@@ -30,6 +37,16 @@ const App = () => {
     );
     const handleResize = (e: { matches: boolean }) =>
       setIsSmallWindow(e.matches);
+    mediaQuery.addEventListener("change", handleResize);
+    return () => mediaQuery.removeEventListener("change", handleResize);
+  }, []);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia(
+      `(max-width: ${VERY_SMALL_WINDOW_WIDTH}px)`
+    );
+    const handleResize = (e: { matches: boolean }) =>
+      setIsVerySmallWindow(e.matches);
     mediaQuery.addEventListener("change", handleResize);
     return () => mediaQuery.removeEventListener("change", handleResize);
   }, []);
@@ -64,6 +81,7 @@ const App = () => {
           >
             <CharacterStats
               form={form}
+              isVerySmallWindow={isVerySmallWindow}
               onChange={(formValues) => {
                 if (
                   !selectedItem ||
@@ -82,6 +100,7 @@ const App = () => {
                   return;
                 setResults(calculateResults(form.getFieldsValue(), newItem));
               }}
+              isVerySmallWindow={isVerySmallWindow}
             />
           </div>
         </div>

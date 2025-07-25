@@ -6,7 +6,8 @@ import { useTranslation } from "react-i18next";
 const Items: FC<{
   selectedItem?: string;
   onItemSelect: (newItem: string) => void;
-}> = ({ selectedItem, onItemSelect }) => {
+  isVerySmallWindow: boolean;
+}> = ({ selectedItem, onItemSelect, isVerySmallWindow }) => {
   const [searchText, setSearchText] = useState<string>("");
   const [skillFilter, setSkillFilter] = useState<string>("all");
   const { t } = useTranslation();
@@ -136,7 +137,9 @@ const Items: FC<{
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(2, 1fr)",
+                gridTemplateColumns: `repeat(${
+                  isVerySmallWindow ? 1 : 2
+                }, 1fr)`,
                 gap: 10,
               }}
             >

@@ -4,6 +4,7 @@ export const HEADER_HEIGHT = 64;
 
 /** Magic number to break the layout. No science here, just the number that felt good. */
 export const SMALL_WINDOW_WIDTH = 1120;
+export const VERY_SMALL_WINDOW_WIDTH = 615;
 
 export const specialPharmacyTable: Record<number, SpecialPharmacyData> = {
   1: { specificValue: 600, maxPotions: 7 },
