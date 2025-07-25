@@ -1,9 +1,5 @@
 import { itemTypes, specialPharmacyTable } from "../constants";
 import type { FormValues, SimulationResult } from "../types";
-import calculateBrewingRate from "./calculateBrewingRate";
-import calculateMixedCookingCreation from "./calculateMixedCookingCreation";
-import calculateMixedCookingDishes from "./calculateMixedCookingDishes";
-import calculatePotionsCreated from "./calculatePotionsCreated";
 
 const calculatePreciseResults = (
   values: FormValues,
@@ -35,10 +31,18 @@ const calculatePreciseResults = (
         const fcpBonus = fcpLevel * fcpMultiplier;
         const totalCreation = baseCreation + randomBonus + fcpBonus;
         const difference = totalCreation - difficulty;
-        const potionsCreated = calculatePotionsCreated(
-          difference,
-          pharmacyData.maxPotions
-        );
+        const { maxPotions } = pharmacyData;
+        let potionsCreated = maxPotions - 6;
+
+        if (difference >= 400) {
+          potionsCreated = maxPotions;
+        } else if (difference >= 300) {
+          potionsCreated = maxPotions - 3;
+        } else if (difference >= 100) {
+          potionsCreated = maxPotions - 4;
+        } else if (difference >= 1) {
+          potionsCreated = maxPotions - 5;
+        }
 
         outcomes[potionsCreated] = (outcomes[potionsCreated] || 0) + 1;
       }
@@ -60,9 +64,16 @@ const calculatePreciseResults = (
       }
     });
   } else if (itemData.skill === "potion_creation") {
-    // Potion Creation precise calculation
+    const rate =
+      values.preparePotionLevel * 3 +
+      values.potionResearchLevel +
+      values.instructionChangeLevel +
+      values.jobLevel * 0.2 +
+      values.dex * 0.1 +
+      values.luk * 0.1 +
+      values.int * 0.05;
     const brewingRate =
-      calculateBrewingRate(values) + (itemData.potionRate || 0);
+      Math.min(100, Math.max(0, rate)) + (itemData.potionRate || 0);
     const finalRate = Math.min(100, Math.max(0, brewingRate));
 
     // Create results based on exact success rate
@@ -91,8 +102,11 @@ const calculatePreciseResults = (
       });
     }
   } else {
-    // Mixed Cooking precise calculation
-    const creation = calculateMixedCookingCreation(values);
+    const creation =
+      Math.floor(values.jobLevel / 4) +
+      Math.floor(values.dex / 3) +
+      Math.floor(values.luk / 2);
+
     const itemRate = itemData.itemRate || 0;
 
     // Calculate outcomes for difficulty range 30-150 + itemRate
@@ -101,7 +115,19 @@ const calculatePreciseResults = (
     for (let baseDifficulty = 30; baseDifficulty <= 150; baseDifficulty++) {
       const totalDifficulty = baseDifficulty + itemRate;
       const difference = creation - totalDifficulty;
-      const dishesCreated = calculateMixedCookingDishes(difference);
+      let dishesCreated = 8;
+
+      if (difference >= 30) {
+        dishesCreated = 11; // Average of 10-12 dishes
+      } else if (difference >= 10) {
+        dishesCreated = 10;
+      } else if (difference === -10) {
+        dishesCreated = 8;
+      } else if (difference <= -30) {
+        dishesCreated = 5;
+      } else if (difference <= -50) {
+        dishesCreated = 0; // cooking fails
+      }
 
       outcomes[dishesCreated] = (outcomes[dishesCreated] || 0) + 1;
     }
