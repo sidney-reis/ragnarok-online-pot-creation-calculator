@@ -10,6 +10,7 @@ import NoResults from "./components/NoResults";
 import Materials from "./components/Materials";
 import CalculationResults from "./components/CalculationResults";
 import Probability from "./components/Probability";
+import Header from "./components/Header";
 
 const App = () => {
   const [form] = Form.useForm<FormValues>();
@@ -21,6 +22,7 @@ const App = () => {
 
   return (
     <div style={{ padding: 16, paddingBottom: 0 }}>
+      <Header />
       <Row gutter={[24, 24]} style={{ height: "calc(100vh - 64px)" }}>
         <Col xs={24} lg={12} style={{ maxWidth: "600px", height: "100%" }}>
           <div
