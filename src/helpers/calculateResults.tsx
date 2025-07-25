@@ -1,7 +1,7 @@
 import { itemTypes, specialPharmacyTable } from "../constants";
 import type { FormValues, SimulationResult } from "../types";
 
-const calculatePreciseResults = (
+const calculateResults = (
   values: FormValues,
   selectedItem: string
 ): SimulationResult[] => {
@@ -154,4 +154,4 @@ const calculatePreciseResults = (
   return results;
 };
 
-export default calculatePreciseResults;
+export default calculateResults;

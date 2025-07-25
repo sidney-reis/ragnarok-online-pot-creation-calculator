@@ -1,4 +1,4 @@
-import { Card, Space, Typography } from "antd";
+import { Card, Typography } from "antd";
 import { useTranslation } from "react-i18next";
 import type { FC } from "react";
 import type { SimulationResult } from "../types";
@@ -30,7 +30,7 @@ const Probability: FC<{ results: SimulationResult[] }> = ({ results }) => {
 
   return (
     <Card title={t("calculationResults.probabilityTitle")} size="small">
-      <Space direction="vertical" style={{ width: "100%" }}>
+      <div className="results-card">
         {statistics.map((stat) => {
           // Determine color based on skill type and relative performance
           let colorType: "success" | "warning" | "error" | "neutral" =
@@ -104,7 +104,7 @@ const Probability: FC<{ results: SimulationResult[] }> = ({ results }) => {
             </div>
           );
         })}
-      </Space>
+      </div>
     </Card>
   );
 };

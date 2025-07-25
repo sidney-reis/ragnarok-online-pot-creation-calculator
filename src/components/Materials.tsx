@@ -1,4 +1,4 @@
-import { Card, Space, Typography } from "antd";
+import { Card, Typography } from "antd";
 import { useTranslation } from "react-i18next";
 import { itemTypes } from "../constants";
 import type { FC } from "react";
@@ -12,7 +12,10 @@ const Materials: FC<{ selectedItem?: string }> = ({ selectedItem }) => {
 
   return (
     <Card title={t("materialsSection.title")} size="small">
-      <Space direction="vertical" style={{ width: "100%" }} size="small">
+      <div
+        className="results-card"
+        style={{ display: "flex", flexDirection: "column", gap: 12 }}
+      >
         {selectedItemData.book && (
           <div>
             <Text strong>{t("materialsSection.requiredBook")}</Text>
@@ -32,7 +35,7 @@ const Materials: FC<{ selectedItem?: string }> = ({ selectedItem }) => {
         <div>
           <Text strong>{t("materialsSection.materialsNeeded")}</Text>
           <div style={{ marginTop: "8px" }}>
-            <Space direction="vertical" style={{ width: "100%" }} size="small">
+            <div>
               {selectedItemData.materials.map((material, index) => (
                 <div
                   key={index}
@@ -61,10 +64,10 @@ const Materials: FC<{ selectedItem?: string }> = ({ selectedItem }) => {
                   </div>
                 </div>
               ))}
-            </Space>
+            </div>
           </div>
         </div>
-      </Space>
+      </div>
     </Card>
   );
 };

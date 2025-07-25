@@ -1,10 +1,10 @@
-import { Select, Space, Typography } from "antd";
+import { Select, Typography } from "antd";
 import { useTranslation } from "react-i18next";
 
 const { Title, Text } = Typography;
 
 import i18n from "../i18n";
-import { LANGUAGE_STORAGE_KEY } from "../constants";
+import { HEADER_HEIGHT, LANGUAGE_STORAGE_KEY } from "../constants";
 
 const Header = () => {
   const { t } = useTranslation();
@@ -18,8 +18,9 @@ const Header = () => {
     <div
       style={{
         display: "flex",
-        marginBottom: 16,
         justifyContent: "space-between",
+        alignItems: "center",
+        height: HEADER_HEIGHT,
       }}
     >
       <Title
@@ -36,21 +37,22 @@ const Header = () => {
           display: "flex",
           alignSelf: "flex-start",
           justifyContent: "flex-end",
+          height: "100%",
+          alignItems: "center",
+          gap: 12,
         }}
       >
-        <Space>
-          <Text>{t("app.language")}:</Text>
-          <Select
-            value={i18n.language}
-            onChange={handleLanguageChange}
-            style={{ width: 120 }}
-            size="small"
-            options={[
-              { value: "en", label: t("app.english") },
-              { value: "pt", label: t("app.portuguese") },
-            ]}
-          />
-        </Space>
+        <Text>{t("app.language")}:</Text>
+        <Select
+          value={i18n.language}
+          onChange={handleLanguageChange}
+          style={{ width: 120 }}
+          size="small"
+          options={[
+            { value: "en", label: t("app.english") },
+            { value: "pt", label: t("app.portuguese") },
+          ]}
+        />
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { Card, Col, Divider, Input, Row, Select } from "antd";
+import { Card, Divider, Input, Select } from "antd";
 import { itemTypes, SELECTED_ITEM_STORAGE_KEY } from "../constants";
 import { useEffect, useState, type FC } from "react";
 import { useTranslation } from "react-i18next";
@@ -54,6 +54,7 @@ const Items: FC<{
           onChange={(e) => setSearchText(e.target.value)}
           allowClear
         />
+
         <Select
           style={{ width: "100%" }}
           placeholder={t("itemSelection.filterPlaceholder")}
@@ -113,6 +114,7 @@ const Items: FC<{
         />
 
         <Divider style={{ margin: "12px 0" }} />
+
         <div
           style={{
             flex: "1 1 0",
@@ -131,19 +133,26 @@ const Items: FC<{
               {t("itemSelection.noItemsFound")}
             </div>
           ) : (
-            <Row gutter={[8, 8]}>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(2, 1fr)",
+                gap: 10,
+              }}
+            >
               {filteredItems.map(([key, value]) => {
                 const rate = value.itemRate || value.potionRate || 0;
                 const isSelected = selectedItem === key;
-                const skillName =
-                  value.skill === "special_pharmacy"
-                    ? t("itemSelection.specialPharmacy")
-                    : value.skill === "potion_creation"
-                    ? t("itemSelection.potionCreation")
-                    : t("itemSelection.mixedCooking");
+                let skillName = t("itemSelection.mixedCooking");
+
+                if (value.skill === "special_pharmacy") {
+                  skillName = t("itemSelection.specialPharmacy");
+                } else if (value.skill === "potion_creation") {
+                  skillName = t("itemSelection.potionCreation");
+                }
 
                 return (
-                  <Col span={12} key={key}>
+                  <div>
                     <Card
                       size="small"
                       hoverable
@@ -194,10 +203,10 @@ const Items: FC<{
                         </div>
                       </div>
                     </Card>
-                  </Col>
+                  </div>
                 );
               })}
-            </Row>
+            </div>
           )}
         </div>
       </div>

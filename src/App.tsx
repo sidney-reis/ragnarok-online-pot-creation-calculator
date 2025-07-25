@@ -1,16 +1,17 @@
-import { useState } from "react";
-import { Form, Row, Col, Space } from "antd";
+import { useEffect, useState } from "react";
+import { Form } from "antd";
 import "./App.css";
 import type { FormValues, SimulationResult } from "./types";
 import FormulaResult from "./components/FormulaResult";
 import CharacterStats from "./components/CharacterStats";
-import calculatePreciseResults from "./helpers/calculatePreciseResults";
+import calculateResults from "./helpers/calculateResults";
 import Items from "./components/Items";
 import NoResults from "./components/NoResults";
 import Materials from "./components/Materials";
 import CalculationResults from "./components/CalculationResults";
 import Probability from "./components/Probability";
 import Header from "./components/Header";
+import { HEADER_HEIGHT, SMALL_WINDOW_WIDTH } from "./constants";
 
 const App = () => {
   const [form] = Form.useForm<FormValues>();
@@ -19,18 +20,46 @@ const App = () => {
     undefined
   );
   const skillUsed = results.length > 0 ? results[0].skill : null;
+  const [isSmallWindow, setIsSmallWindow] = useState(
+    window.innerWidth < SMALL_WINDOW_WIDTH
+  );
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia(
+      `(max-width: ${SMALL_WINDOW_WIDTH}px)`
+    );
+    const handleResize = (e: { matches: boolean }) =>
+      setIsSmallWindow(e.matches);
+    mediaQuery.addEventListener("change", handleResize);
+    return () => mediaQuery.removeEventListener("change", handleResize);
+  }, []);
 
   return (
-    <div style={{ padding: 16, paddingBottom: 0 }}>
+    <div style={{ padding: "0px 16px" }}>
       <Header />
-      <Row gutter={[24, 24]} style={{ height: "calc(100vh - 64px)" }}>
-        <Col xs={24} lg={12} style={{ maxWidth: "600px", height: "100%" }}>
+      <div
+        style={{
+          height: `calc(100vh - ${HEADER_HEIGHT}px)`,
+          display: "flex",
+          gap: 24,
+          flexWrap: "wrap",
+        }}
+      >
+        <div
+          style={{
+            minHeight: 800,
+            maxHeight: isSmallWindow ? undefined : "100%",
+            width: isSmallWindow ? "100%" : 600,
+            overflow: "auto",
+          }}
+        >
           <div
             style={{
               display: "flex",
               flexDirection: "column",
               gap: "24px",
               height: "100%",
+              width: "100%",
             }}
           >
             <CharacterStats
@@ -41,7 +70,7 @@ const App = () => {
                   form.getFieldsError().some(({ errors }) => errors.length)
                 )
                   return;
-                setResults(calculatePreciseResults(formValues, selectedItem));
+                setResults(calculateResults(formValues, selectedItem));
               }}
             />
 
@@ -49,37 +78,36 @@ const App = () => {
               selectedItem={selectedItem}
               onItemSelect={(newItem) => {
                 setSelectedItem(newItem);
-                console.log(form.getFieldsError());
                 if (form.getFieldsError().some(({ errors }) => errors.length))
                   return;
-                setResults(
-                  calculatePreciseResults(form.getFieldsValue(), newItem)
-                );
+                setResults(calculateResults(form.getFieldsValue(), newItem));
               }}
             />
           </div>
-        </Col>
+        </div>
 
-        <Col xs={24} lg={8}>
-          {results.length > 0 && (
-            <Space direction="vertical" style={{ width: "100%" }} size="large">
+        {results.length > 0 ? (
+          <div style={{ height: "100%", flex: "1 1 0" }}>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(450px, 1fr))",
+                gap: 24,
+                overflow: "auto",
+                maxHeight: "100%",
+                width: "100%",
+              }}
+            >
               <CalculationResults results={results} />
               <Probability results={results} />
-            </Space>
-          )}
-        </Col>
-
-        <Col xs={24} lg={8}>
-          {results.length > 0 && (
-            <Space direction="vertical" style={{ width: "100%" }} size="large">
               <FormulaResult skill={skillUsed} />
               <Materials selectedItem={selectedItem} />
-            </Space>
-          )}
-
-          {results.length === 0 && <NoResults />}
-        </Col>
-      </Row>
+            </div>
+          </div>
+        ) : (
+          <NoResults />
+        )}
+      </div>
     </div>
   );
 };

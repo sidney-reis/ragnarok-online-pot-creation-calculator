@@ -1,4 +1,4 @@
-import { Card, Col, Form, InputNumber, Row, type FormInstance } from "antd";
+import { Card, Form, InputNumber, type FormInstance } from "antd";
 import { useEffect, type FC } from "react";
 import { useTranslation } from "react-i18next";
 import type { FormValues } from "../types";
@@ -47,8 +47,14 @@ const CharacterStats: FC<{
           onChange(formValues);
         }}
       >
-        <Row gutter={8}>
-          <Col span={5}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(5, 1fr)",
+            gap: "5px 10px",
+          }}
+        >
+          <div>
             <Form.Item
               label={t("characterStats.int")}
               name="int"
@@ -66,8 +72,8 @@ const CharacterStats: FC<{
                 size="small"
               />
             </Form.Item>
-          </Col>
-          <Col span={5}>
+          </div>
+          <div>
             <Form.Item
               label={t("characterStats.dex")}
               name="dex"
@@ -85,8 +91,8 @@ const CharacterStats: FC<{
                 size="small"
               />
             </Form.Item>
-          </Col>
-          <Col span={5}>
+          </div>
+          <div>
             <Form.Item
               label={t("characterStats.luk")}
               name="luk"
@@ -104,8 +110,8 @@ const CharacterStats: FC<{
                 size="small"
               />
             </Form.Item>
-          </Col>
-          <Col span={5}>
+          </div>
+          <div>
             <Form.Item
               label={t("characterStats.baseLevel")}
               name="baseLevel"
@@ -123,8 +129,8 @@ const CharacterStats: FC<{
                 size="small"
               />
             </Form.Item>
-          </Col>
-          <Col span={4}>
+          </div>
+          <div>
             <Form.Item
               label={t("characterStats.jobLevel")}
               name="jobLevel"
@@ -142,11 +148,8 @@ const CharacterStats: FC<{
                 size="small"
               />
             </Form.Item>
-          </Col>
-        </Row>
-
-        <Row gutter={8} style={{ marginTop: "4px" }}>
-          <Col span={5}>
+          </div>
+          <div>
             <Form.Item
               label={t("characterStats.potionResearchLevel")}
               name="potionResearchLevel"
@@ -164,8 +167,8 @@ const CharacterStats: FC<{
                 size="small"
               />
             </Form.Item>
-          </Col>
-          <Col span={5}>
+          </div>
+          <div>
             <Form.Item
               label={t("characterStats.fullChemicalProtectionLevel")}
               name="fullChemicalProtectionLevel"
@@ -183,8 +186,8 @@ const CharacterStats: FC<{
                 size="small"
               />
             </Form.Item>
-          </Col>
-          <Col span={5}>
+          </div>
+          <div>
             <Form.Item
               label={t("characterStats.specialPharmacyLevel")}
               name="specialPharmacyLevel"
@@ -202,8 +205,8 @@ const CharacterStats: FC<{
                 size="small"
               />
             </Form.Item>
-          </Col>
-          <Col span={5}>
+          </div>
+          <div>
             <Form.Item
               label={t("characterStats.preparePotionLevel")}
               name="preparePotionLevel"
@@ -221,8 +224,8 @@ const CharacterStats: FC<{
                 size="small"
               />
             </Form.Item>
-          </Col>
-          <Col span={4}>
+          </div>
+          <div>
             <Form.Item
               label={t("characterStats.instructionChangeLevel")}
               name="instructionChangeLevel"
@@ -240,8 +243,8 @@ const CharacterStats: FC<{
                 size="small"
               />
             </Form.Item>
-          </Col>
-        </Row>
+          </div>
+        </div>
       </Form>
     </Card>
   );
