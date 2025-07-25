@@ -9,7 +9,6 @@ export interface FormValues {
   specialPharmacyLevel: number;
   preparePotionLevel: number;
   instructionChangeLevel: number;
-  itemType: string;
 }
 
 export interface SpecialPharmacyData {
@@ -26,7 +25,7 @@ export interface ItemTypeData {
   icon: string;
   skill: Skill;
   book?: string;
-  materials?: Array<{
+  materials: Array<{
     name: string;
     quantity: number;
     icon?: string;
@@ -41,9 +40,3 @@ export interface SimulationResult {
   successRate: string;
   skill: Skill;
 }
-
-export type StorageState = {
-  selectedItemType: string;
-  formValues: Partial<FormValues>;
-  isFormulaCollapsed: boolean;
-};

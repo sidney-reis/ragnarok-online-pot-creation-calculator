@@ -1,6 +1,6 @@
 import type { FC } from "react";
 import type { Skill } from "../types";
-import { Typography } from "antd";
+import { Card, Typography } from "antd";
 import { useTranslation } from "react-i18next";
 
 const { Text } = Typography;
@@ -10,7 +10,7 @@ const FormulaResult: FC<{ skill: Skill | null }> = ({ skill }) => {
 
   if (skill === "special_pharmacy") {
     return (
-      <>
+      <Card title={t("formulaInfo.title")} size="small">
         <Text>
           <strong>{t("formulaInfo.specialPharmacy.creationFormula")}</strong>
           <br />
@@ -33,13 +33,13 @@ const FormulaResult: FC<{ skill: Skill | null }> = ({ skill }) => {
           <br />• {t("formulaInfo.specialPharmacy.condition4")}
           <br />• {t("formulaInfo.specialPharmacy.condition5")}
         </Text>
-      </>
+      </Card>
     );
   }
 
   if (skill === "potion_creation") {
     return (
-      <>
+      <Card title={t("formulaInfo.title")} size="small">
         <Text>
           <strong>{t("formulaInfo.potionCreation.brewingRateFormula")}</strong>
           <br />
@@ -54,13 +54,13 @@ const FormulaResult: FC<{ skill: Skill | null }> = ({ skill }) => {
           <br />
           {t("formulaInfo.potionCreation.successConditionText2")}
         </Text>
-      </>
+      </Card>
     );
   }
 
   if (skill === "mixed_cooking") {
     return (
-      <>
+      <Card title={t("formulaInfo.title")} size="small">
         <Text>
           <strong>{t("formulaInfo.mixedCooking.creationFormula")}</strong>
           <br />
@@ -83,7 +83,7 @@ const FormulaResult: FC<{ skill: Skill | null }> = ({ skill }) => {
           <br />• {t("formulaInfo.mixedCooking.condition4")}
           <br />• {t("formulaInfo.mixedCooking.condition5")}
         </Text>
-      </>
+      </Card>
     );
   }
 

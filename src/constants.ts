@@ -15,6 +15,29 @@ export const specialPharmacyTable: Record<number, SpecialPharmacyData> = {
   10: { specificValue: 420, maxPotions: 12 },
 };
 
+export const colors = {
+  success: {
+    bg: "#f6ffed",
+    border: "#b7eb8f",
+    dot: "#52c41a",
+  },
+  warning: {
+    bg: "#fffbe6",
+    border: "#ffe58f",
+    dot: "#faad14",
+  },
+  error: {
+    bg: "#fff2f0",
+    border: "#ffccc7",
+    dot: "#ff4d4f",
+  },
+  neutral: {
+    bg: "#fafafa",
+    border: "#d9d9d9",
+    dot: "#8c8c8c",
+  },
+};
+
 export const itemTypes: Record<string, ItemTypeData> = {
   // Special Pharmacy items
   thorn_plant_seed: {
@@ -1290,4 +1313,4 @@ export const itemTypes: Record<string, ItemTypeData> = {
   },
 };
 
-export const STORAGE_KEY = "ragnarok-potion-simulator";
+export const FORM_STORAGE_KEY = "ragnarok-potion-simulator-FORM_STORAGE_KEY";

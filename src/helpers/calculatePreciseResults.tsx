@@ -5,8 +5,11 @@ import calculateMixedCookingCreation from "./calculateMixedCookingCreation";
 import calculateMixedCookingDishes from "./calculateMixedCookingDishes";
 import calculatePotionsCreated from "./calculatePotionsCreated";
 
-const calculatePreciseResults = (values: FormValues): SimulationResult[] => {
-  const itemData = itemTypes[values.itemType];
+const calculatePreciseResults = (
+  values: FormValues,
+  selectedItem: string
+): SimulationResult[] => {
+  const itemData = itemTypes[selectedItem];
   const results: SimulationResult[] = [];
 
   if (itemData.skill === "special_pharmacy") {
