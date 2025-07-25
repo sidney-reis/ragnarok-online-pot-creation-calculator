@@ -1314,3 +1314,7 @@ export const itemTypes: Record<string, ItemTypeData> = {
 };
 
 export const FORM_STORAGE_KEY = "ragnarok-potion-simulator-FORM_STORAGE_KEY";
+export const SELECTED_ITEM_STORAGE_KEY =
+  "ragnarok-potion-simulator-SELECTED_ITEM_STORAGE_KEY";
+export const LANGUAGE_STORAGE_KEY =
+  "ragnarok-potion-simulator-LANGUAGE_STORAGE_KEY";

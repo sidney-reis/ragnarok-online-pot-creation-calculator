@@ -2,6 +2,7 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import en from "./locales/en.json";
 import pt from "./locales/pt.json";
+import { LANGUAGE_STORAGE_KEY } from "../constants";
 
 const resources = {
   en: {
@@ -12,10 +13,9 @@ const resources = {
   },
 };
 
-// Get saved language from localStorage or default to 'en'
 const getSavedLanguage = (): string => {
   try {
-    const savedLanguage = localStorage.getItem("ragnarok-simulator-language");
+    const savedLanguage = localStorage.getItem(LANGUAGE_STORAGE_KEY);
     return savedLanguage && ["en", "pt"].includes(savedLanguage)
       ? savedLanguage
       : "en";
@@ -27,7 +27,7 @@ const getSavedLanguage = (): string => {
 
 i18n.use(initReactI18next).init({
   resources,
-  lng: getSavedLanguage(), // use saved language or default
+  lng: getSavedLanguage(),
   fallbackLng: "en",
   interpolation: {
     escapeValue: false,

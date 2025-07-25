@@ -4,18 +4,14 @@ import { useTranslation } from "react-i18next";
 const { Title, Text } = Typography;
 
 import i18n from "../i18n";
+import { LANGUAGE_STORAGE_KEY } from "../constants";
 
 const Header = () => {
   const { t } = useTranslation();
 
   const handleLanguageChange = (language: string) => {
     i18n.changeLanguage(language);
-    // Save language preference to localStorage
-    try {
-      localStorage.setItem("ragnarok-simulator-language", language);
-    } catch (error) {
-      console.error("Error saving language preference:", error);
-    }
+    localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
   };
 
   return (

@@ -1,6 +1,6 @@
 import { Card, Col, Divider, Input, Row, Select } from "antd";
-import { itemTypes } from "../constants";
-import { useState, type FC } from "react";
+import { itemTypes, SELECTED_ITEM_STORAGE_KEY } from "../constants";
+import { useEffect, useState, type FC } from "react";
 import { useTranslation } from "react-i18next";
 
 const Items: FC<{
@@ -10,6 +10,13 @@ const Items: FC<{
   const [searchText, setSearchText] = useState<string>("");
   const [skillFilter, setSkillFilter] = useState<string>("all");
   const { t } = useTranslation();
+
+  useEffect(() => {
+    const selectedItemLs = localStorage.getItem(SELECTED_ITEM_STORAGE_KEY);
+    if (selectedItemLs) {
+      onItemSelect(selectedItemLs);
+    }
+  }, []);
 
   const filteredItems = Object.entries(itemTypes).filter(([, value]) => {
     const matchesSearch = value.name
@@ -140,7 +147,10 @@ const Items: FC<{
                     <Card
                       size="small"
                       hoverable
-                      onClick={() => onItemSelect(key)}
+                      onClick={() => {
+                        onItemSelect(key);
+                        localStorage.setItem(SELECTED_ITEM_STORAGE_KEY, key);
+                      }}
                       style={{
                         cursor: "pointer",
                         border: isSelected
