@@ -20,9 +20,25 @@ body {
   text-align: center;
 }
 
-/* Reduce margin below form items */
 .ant-form-item {
-  margin-bottom: 4px !important;
+  height: 100%;
+  /* Reduce margin below form items */
+  margin-bottom: 0 !important;
+}
+
+.ant-form-item-row {
+  height: 100%;
+}
+
+.ant-form-item-label {
+  flex: unset !important;
+  flex-grow: 1 !important;
+  padding-bottom: 0 !important;
+}
+
+.ant-form-item-control {
+  flex-grow: unset !important;
+  flex: unset !important;
 }
 
 .ant-card {
