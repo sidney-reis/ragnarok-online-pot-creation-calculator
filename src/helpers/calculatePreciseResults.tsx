@@ -72,8 +72,10 @@ const calculatePreciseResults = (
       values.dex * 0.1 +
       values.luk * 0.1 +
       values.int * 0.05;
+
     const brewingRate =
       Math.min(100, Math.max(0, rate)) + (itemData.potionRate || 0);
+
     const finalRate = Math.min(100, Math.max(0, brewingRate));
 
     // Create results based on exact success rate
