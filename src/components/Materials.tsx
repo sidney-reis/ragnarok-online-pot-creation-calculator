@@ -1,6 +1,6 @@
 import { Card, Typography } from "antd";
 import { useTranslation } from "react-i18next";
-import { itemTypes } from "../constants";
+import { ITEM_IMAGE_URL, itemTypes } from "../constants";
 import type { FC } from "react";
 
 const { Text } = Typography;
@@ -49,13 +49,11 @@ const Materials: FC<{ selectedItem?: string }> = ({ selectedItem }) => {
                     border: "1px solid var(--border-color)",
                   }}
                 >
-                  {material.icon && (
-                    <img
-                      src={material.icon}
-                      alt={material.name}
-                      style={{ width: "24px", height: "24px" }}
-                    />
-                  )}
+                  <img
+                    src={`${ITEM_IMAGE_URL}/${material.id}.png`}
+                    alt={material.name}
+                    style={{ width: "24px", height: "24px" }}
+                  />
                   <div style={{ flex: 1 }}>
                     <Text>{t(material.name)}</Text>
                   </div>

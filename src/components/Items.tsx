@@ -1,5 +1,9 @@
 import { Card, Divider, Input, Select } from "antd";
-import { itemTypes, SELECTED_ITEM_STORAGE_KEY } from "../constants";
+import {
+  ITEM_IMAGE_URL,
+  itemTypes,
+  SELECTED_ITEM_STORAGE_KEY,
+} from "../constants";
 import { useEffect, useState, type FC } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -20,9 +24,10 @@ const Items: FC<{
   }, []);
 
   const filteredItems = Object.entries(itemTypes).filter(([, value]) => {
-    const matchesSearch = value.name
+    const matchesSearch = t(value.name)
       .toLowerCase()
-      .includes(searchText.toLowerCase());
+      .trim()
+      .includes(searchText.toLowerCase().trim());
 
     const matchesSkill = skillFilter === "all" || value.skill === skillFilter;
 
@@ -183,7 +188,7 @@ const Items: FC<{
                         }}
                       >
                         <img
-                          src={value.icon}
+                          src={`${ITEM_IMAGE_URL}/${value.id}.png`}
                           alt={value.name}
                           style={{ width: "24px", height: "24px" }}
                         />

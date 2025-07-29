@@ -137,5 +137,5 @@ body {
 
 :root[data-theme="dark"] {
   scrollbar-width: thin;
-  scrollbar-color: #555555 #2a2a2a;
+  scrollbar-color: #555555 transparent;
 }

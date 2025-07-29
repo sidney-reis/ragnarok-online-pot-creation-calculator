@@ -22,13 +22,13 @@ export interface ItemTypeData {
   name: string;
   itemRate?: number; // For Special Pharmacy and Mixed Cooking items
   potionRate?: number; // For Potion Creation items
-  icon: string;
   skill: Skill;
   book?: string;
+  id: number;
   materials: Array<{
     name: string;
     quantity: number;
-    icon?: string;
+    id: number;
   }>;
 }
 
