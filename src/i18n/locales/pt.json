@@ -51,6 +51,8 @@
     "skillUsed": "Habilidade Usada",
     "averageCreationValue": "Valor Médio de Criação",
     "averageItemsCreated": "Média de Itens Criados",
+    "estimatedCostPerItem": "Custo Estimado por Item",
+    "fillMaterialCosts": "Preencha custos de materiais",
     "probabilityTitle": "Probabilidade de Criação de Itens",
     "potions": "Itens",
     "outOf": "de",
@@ -95,7 +97,8 @@
   "materialsSection": {
     "title": "Materiais e Livros Necessários",
     "requiredBook": "Livro Necessário:",
-    "materialsNeeded": "Materiais Necessários:"
+    "materialsNeeded": "Materiais Necessários:",
+    "costPerUnit": "Custo por unidade"
   },
   "items": {
     "thornPlantSeed": "Semente de Planta Selvagem",

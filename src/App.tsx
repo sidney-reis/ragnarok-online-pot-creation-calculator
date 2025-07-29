@@ -24,6 +24,9 @@ const AppContent = () => {
   const [selectedItem, setSelectedItem] = useState<string | undefined>(
     undefined
   );
+  const [materialCosts, setMaterialCosts] = useState<Record<number, number>>(
+    {}
+  );
   const skillUsed = results.length > 0 ? results[0].skill : null;
   const [isSmallWindow, setIsSmallWindow] = useState(
     window.innerWidth < SMALL_WINDOW_WIDTH
@@ -51,6 +54,20 @@ const AppContent = () => {
     mediaQuery.addEventListener("change", handleResize);
     return () => mediaQuery.removeEventListener("change", handleResize);
   }, []);
+
+  const handleMaterialCostChange = (
+    materialId: number,
+    cost: number | null
+  ) => {
+    setMaterialCosts((prev) => {
+      if (cost === null) {
+        const next = { ...prev };
+        delete next[materialId];
+        return next;
+      }
+      return { ...prev, [materialId]: cost };
+    });
+  };
 
   return (
     <div style={{ padding: "0px 16px" }}>
@@ -119,10 +136,18 @@ const AppContent = () => {
           >
             {results.length > 0 ? (
               <>
-                <CalculationResults results={results} />
+                <CalculationResults
+                  results={results}
+                  selectedItem={selectedItem}
+                  materialCosts={materialCosts}
+                />
                 <Probability results={results} />
                 <FormulaResult skill={skillUsed} />
-                <Materials selectedItem={selectedItem} />
+                <Materials
+                  selectedItem={selectedItem}
+                  materialCosts={materialCosts}
+                  onMaterialCostChange={handleMaterialCostChange}
+                />
               </>
             ) : (
               <NoResults />

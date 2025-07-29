@@ -51,6 +51,9 @@
     "skillUsed": "Skill Used",
     "averageCreationValue": "Average Creation Value",
     "averageItemsCreated": "Average Items Created",
+    "costPerUnit": "Cost per unit",
+    "estimatedCostPerItem": "Estimated Cost Per Item",
+    "fillMaterialCosts": "Fill material costs",
     "probabilityTitle": "Item Creation Probability",
     "potions": "Items",
     "outOf": "out of",
@@ -95,7 +98,8 @@
   "materialsSection": {
     "title": "Required Materials & Books",
     "requiredBook": "Required Book:",
-    "materialsNeeded": "Materials Needed:"
+    "materialsNeeded": "Materials Needed:",
+    "costPerUnit": "Cost per unit"
   },
   "items": {
     "thornPlantSeed": "Thorn Plant Seed",

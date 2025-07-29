@@ -2,9 +2,18 @@ import { Card, Statistic } from "antd";
 import type { FC } from "react";
 import { useTranslation } from "react-i18next";
 import type { SimulationResult } from "../types";
+import { itemTypes } from "../constants";
 
-const CalculationResults: FC<{ results: SimulationResult[] }> = ({
+interface CalculationResultsProps {
+  results: SimulationResult[];
+  selectedItem?: string;
+  materialCosts?: Record<number, number>;
+}
+
+const CalculationResults: FC<CalculationResultsProps> = ({
   results,
+  selectedItem,
+  materialCosts = {},
 }) => {
   const { t } = useTranslation();
   const skillUsed = results.length > 0 ? results[0].skill : null;
@@ -22,6 +31,26 @@ const CalculationResults: FC<{ results: SimulationResult[] }> = ({
           results.reduce((sum, r) => sum + r.potionsCreated, 0) / results.length
         ).toFixed(2)
       : 0;
+
+  const selectedItemData = selectedItem ? itemTypes[selectedItem] : null;
+  const totalMaterialCost = selectedItemData
+    ? selectedItemData.materials.reduce((sum, material) => {
+        const cost = materialCosts[material.id] || 0;
+        return sum + cost * material.quantity;
+      }, 0)
+    : 0;
+
+  const avgPotionsNum = parseFloat(avgPotions.toString());
+  const estimatedCostPerItem =
+    avgPotionsNum > 0 ? totalMaterialCost / avgPotionsNum : 0;
+
+  const allMaterialsHaveCosts = selectedItemData
+    ? selectedItemData.materials.every(
+        (material) =>
+          materialCosts[material.id] !== null &&
+          materialCosts[material.id] !== undefined
+      )
+    : false;
 
   return (
     <Card title={t("calculationResults.title")} size="small">
@@ -82,6 +111,23 @@ const CalculationResults: FC<{ results: SimulationResult[] }> = ({
               title={t("calculationResults.averageItemsCreated")}
               value={avgPotions}
               precision={2}
+            />
+          </div>
+          <div>
+            <Statistic
+              title={t("calculationResults.estimatedCostPerItem")}
+              value={
+                allMaterialsHaveCosts
+                  ? estimatedCostPerItem.toFixed(0)
+                  : t("calculationResults.fillMaterialCosts")
+              }
+              suffix={allMaterialsHaveCosts ? "zeny" : undefined}
+              precision={0}
+              valueStyle={
+                allMaterialsHaveCosts
+                  ? undefined
+                  : { fontSize: "12px", fontStyle: "italic" }
+              }
             />
           </div>
         </div>
