@@ -83,3 +83,54 @@ body {
   max-height: 300px;
   overflow: auto;
 }
+
+/* Scrollbar styling for light theme */
+:root[data-theme="light"] ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+:root[data-theme="light"] ::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 4px;
+}
+
+:root[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+:root[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Scrollbar styling for dark theme */
+:root[data-theme="dark"] ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+:root[data-theme="dark"] ::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 4px;
+}
+
+:root[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: #555555;
+  border-radius: 4px;
+}
+
+:root[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: #777777;
+}
+
+/* Firefox scrollbar styling */
+:root[data-theme="light"] {
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 transparent;
+}
+
+:root[data-theme="dark"] {
+  scrollbar-width: thin;
+  scrollbar-color: #555555 transparent;
+}
