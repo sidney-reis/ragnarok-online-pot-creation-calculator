@@ -161,7 +161,7 @@ const Items: FC<{
                 }
 
                 return (
-                  <div>
+                  <div key={key}>
                     <Card
                       size="small"
                       hoverable

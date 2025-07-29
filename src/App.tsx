@@ -16,6 +16,7 @@ import {
   HEADER_HEIGHT,
   SMALL_WINDOW_WIDTH,
   VERY_SMALL_WINDOW_WIDTH,
+  MATERIAL_COSTS_STORAGE_KEY,
 } from "./constants";
 
 const AppContent = () => {
@@ -34,6 +35,19 @@ const AppContent = () => {
   const [isVerySmallWindow, setIsVerySmallWindow] = useState(
     window.innerWidth < VERY_SMALL_WINDOW_WIDTH
   );
+
+  useEffect(() => {
+    try {
+      const savedCosts = localStorage.getItem(MATERIAL_COSTS_STORAGE_KEY);
+      console.log(savedCosts);
+      if (savedCosts) {
+        const parsedCosts = JSON.parse(savedCosts);
+        setMaterialCosts(parsedCosts);
+      }
+    } catch (error) {
+      console.error("Failed to load material costs from localStorage:", error);
+    }
+  }, []);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia(
@@ -60,12 +74,17 @@ const AppContent = () => {
     cost: number | null
   ) => {
     setMaterialCosts((prev) => {
+      const next = { ...prev };
+
       if (cost === null) {
-        const next = { ...prev };
         delete next[materialId];
-        return next;
+      } else {
+        next[materialId] = cost;
       }
-      return { ...prev, [materialId]: cost };
+
+      localStorage.setItem(MATERIAL_COSTS_STORAGE_KEY, JSON.stringify(next));
+
+      return next;
     });
   };
 
