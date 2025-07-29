@@ -40,3 +40,5 @@ export interface SimulationResult {
   successRate: string;
   skill: Skill;
 }
+
+export type Theme = "light" | "dark";

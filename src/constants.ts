@@ -1322,3 +1322,4 @@ export const SELECTED_ITEM_STORAGE_KEY =
   "ragnarok-potion-simulator-SELECTED_ITEM_STORAGE_KEY";
 export const LANGUAGE_STORAGE_KEY =
   "ragnarok-potion-simulator-LANGUAGE_STORAGE_KEY";
+export const THEME_STORAGE_KEY = "ragnarok-potion-simulator-THEME_STORAGE_KEY";

@@ -24,19 +24,6 @@ const CharacterStats: FC<{
     }
   }, []);
 
-  // const defaultFormValues: FormValues = {
-  //   int: 99,
-  //   dex: 99,
-  //   luk: 99,
-  //   jobLevel: 50,
-  //   baseLevel: 99,
-  //   potionResearchLevel: 10,
-  //   fullChemicalProtectionLevel: 5,
-  //   specialPharmacyLevel: 10,
-  //   preparePotionLevel: 10,
-  //   instructionChangeLevel: 5,
-  // };
-
   return (
     <Card title={t("characterStats.title")} size="small">
       <Form

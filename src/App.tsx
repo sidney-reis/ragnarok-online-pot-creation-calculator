@@ -11,13 +11,14 @@ import Materials from "./components/Materials";
 import CalculationResults from "./components/CalculationResults";
 import Probability from "./components/Probability";
 import Header from "./components/Header";
+import { ThemeProvider } from "./contexts/ThemeContext";
 import {
   HEADER_HEIGHT,
   SMALL_WINDOW_WIDTH,
   VERY_SMALL_WINDOW_WIDTH,
 } from "./constants";
 
-const App = () => {
+const AppContent = () => {
   const [form] = Form.useForm<FormValues>();
   const [results, setResults] = useState<SimulationResult[]>([]);
   const [selectedItem, setSelectedItem] = useState<string | undefined>(
@@ -130,6 +131,14 @@ const App = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+const App = () => {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   );
 };
 

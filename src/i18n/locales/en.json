@@ -3,7 +3,9 @@
     "title": "Ragnarok Online Potion Creation Calculator",
     "language": "Language",
     "english": "English",
-    "portuguese": "Português"
+    "portuguese": "Português",
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode"
   },
   "itemSelection": {
     "title": "Select Item to Create",

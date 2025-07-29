@@ -1,14 +1,17 @@
-import { Select, Typography } from "antd";
+import { Select, Typography, Button } from "antd";
+import { MoonOutlined, SunOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 
 const { Title, Text } = Typography;
 
 import i18n from "../i18n";
 import { HEADER_HEIGHT, LANGUAGE_STORAGE_KEY } from "../constants";
+import { useTheme } from "../hooks/useTheme";
 import type { FC } from "react";
 
 const Header: FC<{ isSmallWindow: boolean }> = ({ isSmallWindow }) => {
   const { t } = useTranslation();
+  const { theme, toggleTheme } = useTheme();
 
   const handleLanguageChange = (language: string) => {
     i18n.changeLanguage(language);
@@ -47,6 +50,13 @@ const Header: FC<{ isSmallWindow: boolean }> = ({ isSmallWindow }) => {
           gap: 12,
         }}
       >
+        <Button
+          type="text"
+          icon={theme === "dark" ? <SunOutlined /> : <MoonOutlined />}
+          onClick={toggleTheme}
+          size="small"
+          title={theme === "dark" ? t("app.lightMode") : t("app.darkMode")}
+        />
         {!isSmallWindow && <Text>{t("app.language")}:</Text>}
         <Select
           value={i18n.language}

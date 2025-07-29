@@ -3,7 +3,9 @@
     "title": "Calculadora de Criação de Poções Ragnarok Online",
     "language": "Idioma",
     "english": "English",
-    "portuguese": "Português"
+    "portuguese": "Português",
+    "darkMode": "Modo Escuro",
+    "lightMode": "Modo Claro"
   },
   "itemSelection": {
     "title": "Selecionar Item para Criar",
