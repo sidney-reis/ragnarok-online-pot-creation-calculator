@@ -35,7 +35,7 @@ const Items: FC<{
         flex: "1 1 0",
         display: "flex",
         flexDirection: "column",
-        border: "1px solid #f0f0f0",
+        border: "1px solid var(--border-color)",
         padding: 10,
         borderRadius: 8,
         marginBottom: 16,
@@ -128,7 +128,8 @@ const Items: FC<{
               style={{
                 textAlign: "center",
                 padding: "20px",
-                color: "#999",
+                color: "var(--text-color)",
+                opacity: 0.6,
               }}
             >
               {t("itemSelection.noItemsFound")}
@@ -166,9 +167,11 @@ const Items: FC<{
                       style={{
                         cursor: "pointer",
                         border: isSelected
-                          ? "2px solid #1890ff"
-                          : "1px solid #d9d9d9",
-                        backgroundColor: isSelected ? "#f0f8ff" : "white",
+                          ? "2px solid var(--selected-border)"
+                          : `1px solid var(--border-color)`,
+                        backgroundColor: isSelected
+                          ? "var(--selected-background)"
+                          : "var(--card-background)",
                         height: "100%",
                       }}
                     >
@@ -196,10 +199,22 @@ const Items: FC<{
                           >
                             {t(value.name)}
                           </div>
-                          <div style={{ color: "#666", fontSize: "10px" }}>
+                          <div
+                            style={{
+                              color: "var(--text-color)",
+                              opacity: 0.7,
+                              fontSize: "10px",
+                            }}
+                          >
                             {skillName}
                           </div>
-                          <div style={{ color: "#666", fontSize: "10px" }}>
+                          <div
+                            style={{
+                              color: "var(--text-color)",
+                              opacity: 0.7,
+                              fontSize: "10px",
+                            }}
+                          >
                             Rate: {rate > 0 ? "+" : ""}
                             {rate}
                           </div>

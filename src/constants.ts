@@ -20,25 +20,49 @@ export const specialPharmacyTable: Record<number, SpecialPharmacyData> = {
 };
 
 export const colors = {
-  success: {
-    bg: "#f6ffed",
-    border: "#b7eb8f",
-    dot: "#52c41a",
+  light: {
+    success: {
+      bg: "#f6ffed",
+      border: "#b7eb8f",
+      dot: "#52c41a",
+    },
+    warning: {
+      bg: "#fffbe6",
+      border: "#ffe58f",
+      dot: "#faad14",
+    },
+    error: {
+      bg: "#fff2f0",
+      border: "#ffccc7",
+      dot: "#ff4d4f",
+    },
+    neutral: {
+      bg: "#fafafa",
+      border: "#d9d9d9",
+      dot: "#8c8c8c",
+    },
   },
-  warning: {
-    bg: "#fffbe6",
-    border: "#ffe58f",
-    dot: "#faad14",
-  },
-  error: {
-    bg: "#fff2f0",
-    border: "#ffccc7",
-    dot: "#ff4d4f",
-  },
-  neutral: {
-    bg: "#fafafa",
-    border: "#d9d9d9",
-    dot: "#8c8c8c",
+  dark: {
+    success: {
+      bg: "#162312",
+      border: "#274916",
+      dot: "#52c41a",
+    },
+    warning: {
+      bg: "#2b2611",
+      border: "#594214",
+      dot: "#faad14",
+    },
+    error: {
+      bg: "#2a1215",
+      border: "#58181c",
+      dot: "#ff4d4f",
+    },
+    neutral: {
+      bg: "#262626",
+      border: "#424242",
+      dot: "#8c8c8c",
+    },
   },
 };
 

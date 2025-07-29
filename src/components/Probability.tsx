@@ -3,11 +3,13 @@ import { useTranslation } from "react-i18next";
 import type { FC } from "react";
 import type { SimulationResult } from "../types";
 import { colors } from "../constants";
+import { useTheme } from "../hooks/useTheme";
 
 const { Text } = Typography;
 
 const Probability: FC<{ results: SimulationResult[] }> = ({ results }) => {
   const { t } = useTranslation();
+  const { theme } = useTheme();
   const potionCounts: Record<number, number> = {};
 
   results.forEach((result) => {
@@ -73,8 +75,8 @@ const Probability: FC<{ results: SimulationResult[] }> = ({ results }) => {
                 justifyContent: "space-between",
                 alignItems: "center",
                 padding: "12px 16px",
-                backgroundColor: colors[colorType].bg,
-                border: `1px solid ${colors[colorType].border}`,
+                backgroundColor: colors[theme][colorType].bg,
+                border: `1px solid ${colors[theme][colorType].border}`,
                 borderRadius: "6px",
                 marginBottom: "8px",
               }}
@@ -91,7 +93,7 @@ const Probability: FC<{ results: SimulationResult[] }> = ({ results }) => {
                     width: "8px",
                     height: "8px",
                     borderRadius: "50%",
-                    backgroundColor: colors[colorType].dot,
+                    backgroundColor: colors[theme][colorType].dot,
                   }}
                 />
                 <Text strong>

@@ -23,7 +23,7 @@ const Materials: FC<{ selectedItem?: string }> = ({ selectedItem }) => {
               style={{
                 marginTop: "8px",
                 padding: "8px",
-                backgroundColor: "#f5f5f5",
+                backgroundColor: "var(--hover-background)",
                 borderRadius: "4px",
               }}
             >
@@ -44,9 +44,9 @@ const Materials: FC<{ selectedItem?: string }> = ({ selectedItem }) => {
                     alignItems: "center",
                     gap: "12px",
                     padding: "8px",
-                    backgroundColor: "#fafafa",
+                    backgroundColor: "var(--hover-background)",
                     borderRadius: "4px",
-                    border: "1px solid #e8e8e8",
+                    border: "1px solid var(--border-color)",
                   }}
                 >
                   {material.icon && (
