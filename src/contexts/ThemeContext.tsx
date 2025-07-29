@@ -11,8 +11,28 @@ interface ThemeProviderProps {
 export const ThemeProvider = ({ children }: ThemeProviderProps) => {
   const [currentTheme, setCurrentTheme] = useState<Theme>(() => {
     const savedTheme = localStorage.getItem(THEME_STORAGE_KEY) as Theme;
-    return savedTheme || "light";
+    if (savedTheme) {
+      return savedTheme;
+    }
+
+    // Use system preference as default
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+    return prefersDark ? "dark" : "light";
   });
+
+  // Disable transitions during startup
+  useEffect(() => {
+    document.documentElement.classList.add("no-transitions");
+
+    // Enable transitions after a short delay to allow initial render
+    const timer = setTimeout(() => {
+      document.documentElement.classList.remove("no-transitions");
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const toggleTheme = () => {
     const newTheme: Theme = currentTheme === "light" ? "dark" : "light";

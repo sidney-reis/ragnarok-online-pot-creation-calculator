@@ -8,4 +8,3 @@
 - iRO/bRO wikis apis? https://db.irowiki.org/db/ https://www.divine-pride.net/api
 - Website thumbnail
 - Search in translations
-- Dark mode

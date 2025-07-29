@@ -41,6 +41,11 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* Disable transitions during startup */
+.no-transitions * {
+  transition: none !important;
+}
+
 #root {
   text-align: center;
 }
@@ -132,5 +137,5 @@ body {
 
 :root[data-theme="dark"] {
   scrollbar-width: thin;
-  scrollbar-color: #555555 transparent;
+  scrollbar-color: #555555 #2a2a2a;
 }
