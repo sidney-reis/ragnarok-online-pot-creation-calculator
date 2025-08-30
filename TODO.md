@@ -4,5 +4,4 @@
 - Change Material
 - Test
 - Website thumbnail
-- Costs
 - Item description
